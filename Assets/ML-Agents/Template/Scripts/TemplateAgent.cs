@@ -25,7 +25,14 @@ public class TemplateAgent : Agent {
 
     public override void AgentStep(float[] act)
     {
-        forward = car.GetComponent<Rigidbody>().transform.forward;
+        Rigidbody body = car.GetComponent<Rigidbody>();
+        forward = body.transform.forward;
+
+        if (body.transform.position.y < -0.25F) {
+            done = true;
+            reward = 0.0F;
+            return;
+        }
 
         float motor = act[0];
         float steer = act[1];
@@ -43,6 +50,7 @@ public class TemplateAgent : Agent {
     public override void AgentReset()
     {
         car.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
+        car.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         car.GetComponent<Rigidbody>().velocity = Vector3.zero;
         m_Car = car.GetComponent<CarController>();
         forward = car.GetComponent<Rigidbody>().transform.forward;
