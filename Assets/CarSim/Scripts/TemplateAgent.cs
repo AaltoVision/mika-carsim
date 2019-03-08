@@ -17,11 +17,6 @@ public class TemplateAgent : Agent {
         AgentReset();
     }
 
-    public override void CollectObservations()
-    {
-        AddVectorObs(Vector3.Dot(forward, car.GetComponent<Rigidbody>().velocity));
-    }
-
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         Rigidbody body = car.GetComponent<Rigidbody>();
@@ -55,7 +50,7 @@ public class TemplateAgent : Agent {
         body.velocity = Vector3.zero;
         body.angularVelocity = Vector3.zero;
         m_Car = car.GetComponent<CarController>();
-        forward = car.GetComponent<Rigidbody>().transform.forward;
+        forward = body.transform.forward;
     }
 
     public override void AgentOnDone()
