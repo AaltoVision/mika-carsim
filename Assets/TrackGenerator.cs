@@ -119,24 +119,24 @@ public class TrackGenerator : MonoBehaviour
             float t = i * resolution;
 
             //Find the coordinate between the end points with a Catmull-Rom spline
-            Vector3[] catpos = GetCatmullRomPosition(t, p0, p1, p2, p3);
-            Vector3 newPos = catpos[0];
-            Vector3 newd = catpos[1];// / catpos[1].magnitude;
-            Vector3 dir = Vector3.Normalize(newd);
-            Vector3 asd = newPos + dir;
-            Vector3 p = new Vector3(dir.z, dir.y, -dir.x) * 5.0f;
+            Vector3[] catmullPosition = GetCatmullRomPosition(t, p0, p1, p2, p3);
+            Vector3 newPosition = catmullPosition[0];
+            Vector3 newd = catmullPosition[1];// / catmullPosition[1].magnitude;
+            Vector3 newDirection = Vector3.Normalize(newd);
+            Vector3 positionPlusDirection = newPosition + newDirection;
+            Vector3 p = new Vector3(newDirection.z, newDirection.y, -newDirection.x) * 5.0f;
             //Draw this line segment
             if (editor) {
-                Gizmos.DrawLine(newPos, asd);
-                Gizmos.DrawLine(newPos, newPos+p);
-                Gizmos.DrawLine(newPos, newPos-p);
+                Gizmos.DrawLine(newPosition, positionPlusDirection);
+                Gizmos.DrawLine(newPosition, newPosition+p);
+                Gizmos.DrawLine(newPosition, newPosition-p);
             } else {
-                vertices.Add(newPos-p);
-                vertices.Add(newPos+p);
+                vertices.Add(newPosition-p);
+                vertices.Add(newPosition+p);
             }
 
             //Save this pos so we can draw the next line segment
-            lastPos = newPos;
+            lastPos = newPosition;
         }
     }
 
@@ -178,3 +178,4 @@ public class TrackGenerator : MonoBehaviour
         return new Vector3[]{pos, de};
     }
 }
+
