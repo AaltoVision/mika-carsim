@@ -39,7 +39,7 @@ public class TemplateAgent : Agent {
         float footBrake = 0.0F;
         float handBrake = 0.0F;
         if (motor < 0.0F) {
-            footBrake = -motor;
+            footBrake = motor;
             motor = 0.0F;
         }
         m_Car.Move(steer, motor, footBrake, handBrake);
