@@ -33,14 +33,13 @@ public class TrackGenerator : MonoBehaviour
         }
     }
     public void SetPoints() {
-        Debug.Log("Hello");
-        int n_random = 50;
+        int n_random = 10;
         double[] x = rndsrc.NextDoubles(n_random);
         double[] z = rndsrc.NextDoubles(n_random);
         Point2D[] points = new Point2D[n_random];
         for (int i = 0; i < n_random; i++) {
-            x[i] = x[i] * 200.0;
-            z[i] = z[i] * 200.0;
+            x[i] = x[i] * 300.0;
+            z[i] = z[i] * 300.0;
             points[i] = new Point2D(x[i], z[i]);
         }
         Polygon2D hull = Polygon2D.GetConvexHullFromPoints(points, true);
@@ -84,8 +83,14 @@ public class TrackGenerator : MonoBehaviour
             triangles.Add(i); triangles.Add(i+2); triangles.Add(i+1);
             triangles.Add(i+2); triangles.Add(i+3); triangles.Add(i+1);
         }
+        triangles.Add(vertices.Count-2); triangles.Add(0); triangles.Add(vertices.Count - 1);
+        triangles.Add(0); triangles.Add(1); triangles.Add(vertices.Count-1);
         mesh.triangles = triangles.ToArray();
-
+        Vector2[] uvs = new Vector2[vertices.Count];
+        for (int i = 0; i < uvs.Length; i++) {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+        mesh.uv = uvs;
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 
