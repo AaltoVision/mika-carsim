@@ -10,6 +10,7 @@ public class TemplateAgent : Agent {
 
     private CarController m_Car;
     private Vector3 forward;
+    private bool crashed = false;
 
     // Use this for initialization
     public override void InitializeAgent()
@@ -19,14 +20,13 @@ public class TemplateAgent : Agent {
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        Rigidbody body = car.GetComponent<Rigidbody>();
-        forward = body.transform.forward;
-
-        if (body.transform.position.y < -0.25F) {
+        if (crashed) {
+            SetReward(-10.0f);
             Done();
-            SetReward(0.0f);
             return;
         }
+        Rigidbody body = car.GetComponent<Rigidbody>();
+        forward = body.transform.forward;
 
         float motor = vectorAction[0];
         float steer = vectorAction[1];
@@ -44,6 +44,7 @@ public class TemplateAgent : Agent {
 
     public override void AgentReset()
     {
+        crashed = false;
         car.transform.position = new Vector3(0.0f, 1.0f, 10.0f);
         car.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         Rigidbody body = car.GetComponent<Rigidbody>();
@@ -56,5 +57,10 @@ public class TemplateAgent : Agent {
     public override void AgentOnDone()
     {
         AgentReset();
+    }
+
+    public void OnCrash()
+    {
+        crashed = true;
     }
 }
