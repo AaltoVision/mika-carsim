@@ -45,7 +45,7 @@ public class TemplateAgent : Agent {
     public override void AgentReset()
     {
         crashed = false;
-        car.transform.position = new Vector3(0.0f, 1.0f, 10.0f);
+        car.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
         car.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         Rigidbody body = car.GetComponent<Rigidbody>();
         body.velocity = Vector3.zero;

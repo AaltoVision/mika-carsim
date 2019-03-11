@@ -5,6 +5,7 @@ using UnityEngine;
 public class CollideCheck : MonoBehaviour
 {
     public TemplateAgent agent;
+    public TrackGenerator track;
 
     void Awake()
     {
@@ -15,5 +16,7 @@ public class CollideCheck : MonoBehaviour
     private void OnTriggerExit(Collider collider)
     {
         agent.OnCrash();
+        track.GenerateControlPoints();
+        track.GenerateMesh();
     }
 }

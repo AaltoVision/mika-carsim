@@ -12,7 +12,7 @@ public class TrackGeneratorEditor : Editor
         TrackGenerator myScript = (TrackGenerator)target;
         if(GUILayout.Button("Generate track"))
         {
-            myScript.SetPoints();
+            myScript.GenerateControlPoints();
             EditorUtility.SetDirty(target);
         }
     }
