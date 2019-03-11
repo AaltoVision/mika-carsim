@@ -141,11 +141,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0728525d9889738b9bbb29599bde0458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brain: {fileID: 11400000, guid: 377c61ecc938c937fa2d7286e285f4a6, type: 2}
+  brain: {fileID: 11400000, guid: 888bfb1ab766a16e89e209722eb1c291, type: 2}
   agentParameters:
     agentCameras:
     - {fileID: 1897509390}
-    maxStep: 3000
+    maxStep: 0
     resetOnDone: 1
     onDemandDecision: 0
     numberOfActionsBetweenDecisions: 6
@@ -162,42 +162,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 741969294}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &505125835
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 505125832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e040eaa8759024abbbb14994dc4c55ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fixedPosition: 1
-  verticalOffset: 10
-  DisplayBrainName: 0
-  DisplayBrainType: 0
-  DisplayFrameCount: 1
-  DisplayCurrentReward: 1
-  DisplayMaxReward: 1
-  DisplayState: 0
-  DisplayAction: 0
---- !u!114 &521848063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35813a1be64e144f887d7d5f15b963fa, type: 3}
-  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  brain: {fileID: 969906353}
 --- !u!1 &603885917
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,13 +287,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   broadcastHub:
     broadcastingBrains:
-    - {fileID: 11400000, guid: 377c61ecc938c937fa2d7286e285f4a6, type: 2}
-    _brainsToControl:
-    - {fileID: 11400000, guid: 27e9f15e52f0b86fab69518c43f9f3d1, type: 2}
-    - {fileID: 11400000, guid: 377c61ecc938c937fa2d7286e285f4a6, type: 2}
-  maxSteps: 5000
+    - {fileID: 11400000, guid: 888bfb1ab766a16e89e209722eb1c291, type: 2}
+    _brainsToControl: []
+  maxSteps: 0
   trainingConfiguration:
-    width: 160
+    width: 80
     height: 80
     qualityLevel: 1
     timeScale: 100
@@ -351,9 +315,10 @@ Transform:
   m_LocalPosition: {x: -8.581767, y: -2.4995956, z: 1.112359}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 969906352}
   - {fileID: 304833092}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &903630860 stripped
 GameObject:
@@ -410,25 +375,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c676a8ddf5a5f4f64b35e9ed5028679d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brainParameters:
-    stateSize: 1
-    actionSize: 2
-    memorySize: 0
-    cameraResolutions:
-    - width: 40
-      height: 16
-      blackAndWhite: 0
-    actionDescriptions:
-    - 
-    - 
-    actionSpaceType: 1
-    stateSpaceType: 1
-  brainType: 0
-  CoreBrains:
-  - {fileID: 1910911267}
-  - {fileID: 1477138035}
-  - {fileID: 521848063}
-  instanceID: 13230
+--- !u!1 &1024027913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 1391793545}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1024027914}
+  m_Layer: 0
+  m_Name: Track (Missing Prefab)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1024027914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 1391793545}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024027913}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1391793545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -729,19 +705,6 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82f5eea2d9575633b90b5f55c3f1db24, type: 3}
---- !u!114 &1477138035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 943466ab374444748a364f9d6c3e2fe2, type: 3}
-  m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  brain: {fileID: 969906353}
 --- !u!1001 &1748852233
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -800,6 +763,10 @@ PrefabInstance:
     - target: {fileID: 11400024, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 3}
+      propertyPath: m_SpeedType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11400024, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 3}
@@ -953,7 +920,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &3821719652311535919
 GameObject:
@@ -1047,11 +1014,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlPointsList:
-  - {x: 0, y: 0, z: 10}
-  - {x: -257.69257, y: 0, z: 214.09782}
-  - {x: -188.64038, y: 0, z: 272.78348}
-  track_tile: {fileID: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: -155.05382, y: 0, z: 25.33014}
+  - {x: -112.58732, y: 0, z: 85.29553}
+  - {x: 33.584503, y: 0, z: 230.45998}
+  trackWidth: 5
   isLooping: 1
+  roadColor: {r: 0, g: 0, b: 0, a: 0}
+  lineColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &3821719652311535924
 Transform:
   m_ObjectHideFlags: 0
@@ -1064,5 +1034,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

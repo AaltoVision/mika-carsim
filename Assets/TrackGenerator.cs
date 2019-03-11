@@ -192,7 +192,7 @@ public class TrackGenerator : MonoBehaviour
             lastp = p;
 
             //Save this pos so we can draw the next line segment
-            lastPos = newPosition;
+            lastPos = newPos;
         }
     }
 
