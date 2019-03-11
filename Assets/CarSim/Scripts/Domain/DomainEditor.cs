@@ -3,16 +3,16 @@ using UnityEngine;
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(TrackGenerator))]
-public class TrackGeneratorEditor : Editor
+[CustomEditor(typeof(Domain))]
+public class DomainEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        TrackGenerator myScript = (TrackGenerator)target;
-        if(GUILayout.Button("Generate track"))
+        Domain domain = (Domain) target;
+        if(GUILayout.Button("Randomize Domain"))
         {
-            myScript.GenerateControlPoints();
+            domain.RandomizeDomain();
             EditorUtility.SetDirty(target);
         }
     }

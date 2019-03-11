@@ -4,14 +4,14 @@ using System.Linq;
 using MathNet.Numerics.Random;
 using MathNet.Spatial.Euclidean;
 using UnityEngine;
+using CarSim.Randomization;
 
 //Interpolation between points with a Catmull-Rom spline
-public class TrackGenerator : MonoBehaviour
+public class TrackGenerator : MonoBehaviour, IRandomizable
 {
     public Vector3[] controlPointsList;
     // Distance of track edges from center
     public float trackWidth = 5f;
-    SystemRandomSource rndsrc = new SystemRandomSource(12345, false);
     public Color roadColor;
     public Color lineColor;
 
@@ -33,12 +33,19 @@ public class TrackGenerator : MonoBehaviour
             DisplayCatmullRomSpline(i, true);
         }
     }
-    public void GenerateControlPoints() {
+
+    public void Randomize(int seed) {
+        GenerateControlPoints(seed);
+        RandomizeTexture(seed);
+        GenerateMesh();
+    }
+
+    public void GenerateControlPoints(int seed) {
         verts.Clear();
         tris.Clear();
         uvs.Clear();
-        double[] x = rndsrc.NextDoubles(nRandomPoints);
-        double[] z = rndsrc.NextDoubles(nRandomPoints);
+        double[] x = SystemRandomSource.Doubles(nRandomPoints, seed);
+        double[] z = SystemRandomSource.Doubles(nRandomPoints, seed+1);
         Point2D[] points = new Point2D[nRandomPoints];
 
         for (int i = 0; i < nRandomPoints; i++) {
@@ -97,7 +104,7 @@ public class TrackGenerator : MonoBehaviour
     }
     void OnRenderObject() {
         if (frameNum % 100 == 0) {
-            RandomizeTexture(((int) (rndsrc.NextDoubles(1)[0] * 10000)));
+//            RandomizeTexture(((int) (rndsrc.NextDoubles(1)[0] * 10000)));
         }
         frameNum += 1;
     }
@@ -126,8 +133,7 @@ public class TrackGenerator : MonoBehaviour
     }
     void Start()
     {
-        if (controlPointsList == null) GenerateControlPoints();
-        RandomizeTexture(((int) (rndsrc.NextDoubles(1)[0] * 10000)));
+//        RandomizeTexture(((int) (rndsrc.NextDoubles(1)[0] * 10000)));
         GenerateMesh();
     }
 
