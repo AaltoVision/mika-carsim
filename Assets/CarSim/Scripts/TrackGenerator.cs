@@ -34,18 +34,18 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         }
     }
 
-    public void Randomize(int seed) {
-        GenerateControlPoints(seed);
-        RandomizeTexture(seed);
+    public void Randomize(SystemRandomSource rnd) {
+        GenerateControlPoints(rnd);
+        RandomizeTexture(rnd);
         GenerateMesh();
     }
 
-    public void GenerateControlPoints(int seed) {
+    public void GenerateControlPoints(SystemRandomSource rnd) {
         verts.Clear();
         tris.Clear();
         uvs.Clear();
-        double[] x = SystemRandomSource.Doubles(nRandomPoints, seed);
-        double[] z = SystemRandomSource.Doubles(nRandomPoints, seed+1);
+        double[] x = rnd.NextDoubles(nRandomPoints);
+        double[] z = rnd.NextDoubles(nRandomPoints);
         Point2D[] points = new Point2D[nRandomPoints];
 
         for (int i = 0; i < nRandomPoints; i++) {
@@ -73,14 +73,14 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         controlPointsList = vecs;
     }
 
-    public void RandomizeTexture(int seed) {
+    public void RandomizeTexture(SystemRandomSource rnd) {
         int textureSize = 500;
         int lineWidth = textureSize / 10;
         var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
-        double[] noise = SystemRandomSource.Doubles(textureSize * textureSize * 3, seed);
-        double[] colors = SystemRandomSource.Doubles(2 * 3, seed+1);
+        double[] noise = rnd.NextDoubles(textureSize * textureSize * 3);
+        double[] colors = rnd.NextDoubles(2 * 3);
         roadColor = new Color((float) colors[0], (float) colors[1], (float) colors[2], 1f);
-        lineColor = new Color((float) colors[3], (float) colors[4], (float) colors[5], 1f);
+        lineColor = new Color((float) colors[4], (float) colors[4], (float) colors[5], 1f);
 
         // set the pixel values
         texture.SetPixels(Enumerable.Repeat<Color>(roadColor, textureSize*textureSize).ToArray());
@@ -116,8 +116,8 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         }
 
         Mesh mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh.Clear();
-        GetComponent<MeshFilter>().mesh = mesh;
+        GetComponent<MeshFilter>().sharedMesh.Clear();
+        GetComponent<MeshFilter>().sharedMesh = mesh;
         mesh.vertices = verts.ToArray();
 
         // Add triangles (counter-clockwise winding)
