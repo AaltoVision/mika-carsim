@@ -4,7 +4,7 @@ using UnityEngine;
 using CarSim.Randomization;
 using MathNet.Numerics.Random;
 
-public class RandomSkybox : MonoBehaviour, IRandomizable
+public class RandomCamera : MonoBehaviour, IRandomizable
 {
     public void Randomize(SystemRandomSource rnd) {
         double[] color = rnd.NextDoubles(3);
@@ -14,5 +14,7 @@ public class RandomSkybox : MonoBehaviour, IRandomizable
             (float) color[2],
             1f
         ));
+        float fov = (float) rnd.NextDouble();
+        GetComponent<Camera>().fieldOfView = 50f + fov * 70f;
     }
 }
