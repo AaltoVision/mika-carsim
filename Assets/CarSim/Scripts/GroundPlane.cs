@@ -8,7 +8,12 @@ public class GroundPlane : MonoBehaviour, IRandomizable
 {
     Color materialColor;
     public void Randomize(SystemRandomSource rnd) {
-        materialColor = Random.ColorHSV();
-        GetComponent<Renderer>().sharedMaterial.color = materialColor;
+        double[] color = rnd.NextDoubles(3);
+        GetComponent<Renderer>().sharedMaterial.color = new Color(
+            (float) color[0],
+            (float) color[1],
+            (float) color[2],
+            1f
+        );
     }
 }
