@@ -11,6 +11,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
     public Vector3[] controlPointsList;
     // Distance of track edges from center
     public float trackWidth = 5f;
+    public float lineWidth = 0.1f; // fraction of trackWidth
     public Color roadColor;
     public Color lineColor;
 
@@ -35,6 +36,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
 
     public void Randomize(SystemRandomSource rnd) {
         trackWidth = 2f + (float) rnd.NextDouble() * 5f;
+        lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
         GenerateControlPoints(rnd);
         RandomizeTexture(rnd);
         GenerateMesh();
@@ -83,7 +85,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
 
     public void RandomizeTexture(SystemRandomSource rnd) {
         int textureSize = 500;
-        int lineWidth = textureSize / 10;
+        int lineWidthPx = (int) (textureSize * (lineWidth / 2f));
         var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
         double[] noise = rnd.NextDoubles(textureSize * textureSize * 3);
         double[] colors = rnd.NextDoubles(2 * 3);
@@ -92,7 +94,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
 
         // set the pixel values
         texture.SetPixels(Enumerable.Repeat<Color>(roadColor, textureSize*textureSize).ToArray());
-        for (int x = 0; x < lineWidth; x++) {
+        for (int x = 0; x < lineWidthPx; x++) {
             for (int y = 0; y < textureSize; y++) {
                 texture.SetPixel(x, y, lineColor);
                 texture.SetPixel(textureSize-x, y, lineColor);
