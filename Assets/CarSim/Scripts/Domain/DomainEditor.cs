@@ -15,7 +15,6 @@ public class DomainEditor : Editor
         if (newSeed != seed) {
             domain.seed = newSeed;
             domain.UpdateRandomSource();
-            Debug.Log("Update");
         }
 
         seed = newSeed;
