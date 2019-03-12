@@ -6,7 +6,6 @@ using MathNet.Spatial.Euclidean;
 using UnityEngine;
 using CarSim.Randomization;
 
-//Interpolation between points with a Catmull-Rom spline
 public class TrackGenerator : MonoBehaviour, IRandomizable
 {
     public Vector3[] controlPointsList;
@@ -35,6 +34,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
     }
 
     public void Randomize(SystemRandomSource rnd) {
+        trackWidth = 2f + (float) rnd.NextDouble() * 5f;
         GenerateControlPoints(rnd);
         RandomizeTexture(rnd);
         GenerateMesh();
@@ -62,6 +62,14 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         for (int i = 0; i < n_vertices; i++) {
             Point2D point = hullVertices.Current;
             vecs[i] = new Vector3((float) point.X, 0f, (float) -point.Y);
+            if (i > 0) {
+                float dist = (vecs[i] - vecs[i-1]).magnitude;
+                if (dist < 25) {
+                    Debug.Log(dist);
+                    double[] randomDir = rnd.NextDoubles(3);
+                    vecs[i] = vecs[i] + (Vector3.Normalize(vecs[i] - vecs[i-1]) * 20f);
+                }
+            }
             hullVertices.MoveNext();
         }
 
