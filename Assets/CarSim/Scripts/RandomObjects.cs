@@ -44,6 +44,7 @@ public class RandomObjects : MonoBehaviour, IRandomizable
                                                                            (float) color[1],
                                                                            (float) color[2],
                                                                            1f);
+            cube.layer = 10;
             children.Add(cube);
         }
     }

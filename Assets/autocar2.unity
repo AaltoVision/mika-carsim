@@ -186,8 +186,9 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.18040988, g: 0.92490155, b: 0.017920297, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SegColor: {r: 1, g: 0.078848414, b: 0, a: 1}
 --- !u!114 &161879495 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1478810326669917411, guid: a3df451aa400bc8b98c6f2b3c40df73a,
@@ -375,8 +376,8 @@ Material:
     (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
     (Instance) (Instance) (Instance)
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _LIGHTMAPPING_DYNAMIC_LIGHTMAPS _UVSEC_UV1
-  m_LightmapFlags: 5
+  m_ShaderKeywords: _EMISSION _LIGHTMAPPING_DYNAMIC_LIGHTMAPS _UVSEC_UV1
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -454,6 +455,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0.99999994}
     - _EmissionColorUI: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColorWithMapUI: {r: 1, g: 1, b: 1, a: 1}
+    - _SegColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &903630860 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100042, guid: 0e7ee4df08df88c4880f43398f9ad2c2,
@@ -814,7 +816,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.23230909, g: 0.4745098, b: 0.19215688, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -828,7 +830,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 51
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -867,6 +869,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 354d72ad9acab28148206113ac606796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  segmentationShader: {fileID: 4800000, guid: f21bdfa2cb82c306686219e3a3d317f2, type: 3}
+  depthShader: {fileID: 4800000, guid: 73e7c33a89e99f9af8c30102ac0a5feb, type: 3}
+  renderMode: 0
 --- !u!1 &2106488820
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,9 +1020,19 @@ PrefabInstance:
       objectReference: {fileID: 1654490105}
     - target: {fileID: 2417504937977377365, guid: a3df451aa400bc8b98c6f2b3c40df73a,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2417504937977377365, guid: a3df451aa400bc8b98c6f2b3c40df73a,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 825399601}
+    - target: {fileID: 2417504937977377365, guid: a3df451aa400bc8b98c6f2b3c40df73a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2417504937977377364, guid: a3df451aa400bc8b98c6f2b3c40df73a,
         type: 3}
       propertyPath: m_Mesh
@@ -1032,6 +1047,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1478810326228957305, guid: a3df451aa400bc8b98c6f2b3c40df73a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2417504937977377367, guid: a3df451aa400bc8b98c6f2b3c40df73a,
         type: 3}
@@ -1347,6 +1367,16 @@ PrefabInstance:
         type: 3}
       propertyPath: trackWidth
       value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1478810326036479240, guid: a3df451aa400bc8b98c6f2b3c40df73a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2417504937977377355, guid: a3df451aa400bc8b98c6f2b3c40df73a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3df451aa400bc8b98c6f2b3c40df73a, type: 3}
