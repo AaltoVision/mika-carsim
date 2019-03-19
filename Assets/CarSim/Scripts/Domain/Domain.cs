@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CarSim.Randomization;
+using CarSim;
 using MathNet.Numerics.Random;
 
 public class Domain : MonoBehaviour
@@ -27,6 +28,8 @@ public class Domain : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
+        int s = int.TryParse(Utils.GetArg("--seed"), out s) ? s : 0;
+        seed = s;
         RandomizeDomain();
     }
 
