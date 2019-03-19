@@ -8,6 +8,8 @@ public class Domain : MonoBehaviour
 {
     SystemRandomSource rnd = new SystemRandomSource(0, true);
     int _seed = 0;
+    long counter = 0;
+    public bool captureFrames = false;
     public int seed {
         get { return _seed; }
         set {
@@ -33,5 +35,17 @@ public class Domain : MonoBehaviour
         foreach (IRandomizable component in components) {
             component.Randomize(rnd);
         }
+        foreach (var cam in GetComponentsInChildren<SimCamera>()) {
+            cam.OnSceneChange();
+        }
+    }
+
+    void Update() {
+//        if (captureFrames) {
+//            if (counter % 10 == 0) {
+//                ScreenCapture.CaptureScreenshot($"./frame_{counter:D6}.png", 1);
+//            }
+//            counter++;
+//        }
     }
 }

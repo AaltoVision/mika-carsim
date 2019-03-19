@@ -8,7 +8,7 @@ public class RandomObjects : MonoBehaviour, IRandomizable
 {
     void DestroyObject(GameObject obj) {
         #if UNITY_EDITOR
-        DestroyImmediate(obj);
+        Destroy(obj);
         #else
         Destroy(obj);
         #endif
@@ -45,6 +45,7 @@ public class RandomObjects : MonoBehaviour, IRandomizable
                                                                            (float) color[2],
                                                                            1f);
             cube.layer = 10;
+            cube.hideFlags = HideFlags.HideAndDontSave;
             children.Add(cube);
         }
     }
