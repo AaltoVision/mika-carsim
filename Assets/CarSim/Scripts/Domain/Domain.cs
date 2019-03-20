@@ -11,6 +11,7 @@ public class Domain : MonoBehaviour
     int _seed = 0;
     long counter = 0;
     public bool captureFrames = false;
+    public bool randomize = true;
     public int seed {
         get { return _seed; }
         set {
@@ -29,6 +30,7 @@ public class Domain : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         int s = int.TryParse(Utils.GetArg("--seed"), out s) ? s : 0;
+        randomize = !Utils.ArgExists("--no-randomize");
         seed = s;
         RandomizeDomain();
     }
@@ -41,5 +43,10 @@ public class Domain : MonoBehaviour
         foreach (var cam in GetComponentsInChildren<SimCamera>()) {
             cam.OnSceneChange();
         }
+    }
+
+    public void Reset() {
+        if (randomize == true)
+            RandomizeDomain();
     }
 }

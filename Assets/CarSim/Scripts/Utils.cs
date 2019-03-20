@@ -15,5 +15,18 @@ namespace CarSim {
             }
             return null;
         }
+
+        public static bool ArgExists(string name)
+        {
+            var args = System.Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

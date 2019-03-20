@@ -5,7 +5,6 @@ using UnityEngine;
 public class CollideCheck : MonoBehaviour
 {
     public TemplateAgent agent;
-    public Domain domain;
 
     void Awake()
     {
@@ -16,6 +15,5 @@ public class CollideCheck : MonoBehaviour
     private void OnTriggerExit(Collider collider)
     {
         agent.OnCrash();
-        domain.RandomizeDomain();
     }
 }

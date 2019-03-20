@@ -7,6 +7,7 @@ using MLAgents;
 public class TemplateAgent : Agent {
     const float rewardDivider = 100.0F;
     public GameObject car;
+    public Domain domain;
 
     private CarController m_Car;
     private Vector3 forward;
@@ -44,6 +45,7 @@ public class TemplateAgent : Agent {
 
     public override void AgentReset()
     {
+        domain.Reset();
         crashed = false;
         car.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
         car.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
