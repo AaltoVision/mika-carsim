@@ -20,6 +20,8 @@ public class Domain : MonoBehaviour
         }
     }
 
+    private long episodeNum = 0;
+
     void Awake() {
     }
 
@@ -48,5 +50,11 @@ public class Domain : MonoBehaviour
     public void Reset() {
         if (randomize == true)
             RandomizeDomain();
+
+        episodeNum++;
+        foreach (var cam in GetComponentsInChildren<SimCamera>()) {
+            cam.episodeNum = episodeNum;
+            cam.frameNum = 0;
+        }
     }
 }

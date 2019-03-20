@@ -19,8 +19,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
     List<Camera> cameras = new List<Camera>();
     List<Shader> shaders = new List<Shader>();
 
-    private long frameNum = 0;
-    private long sequenceNum = 0;
+    public long episodeNum { get; set; }
+    public long frameNum { get; set; }
 
     void Start() {
         shaders.Add(depthShader);
@@ -49,8 +49,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
         ));
         float fov = (float) rnd.NextDouble();
         GetComponent<Camera>().fieldOfView = 50f + fov * 70f;
-        sequenceNum++;
-        frameNum = 0;
     }
 
     public static Color LayerToColor(int layer)
@@ -125,7 +123,7 @@ public class SimCamera : MonoBehaviour, IRandomizable
             RenderTexture.active = null;
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
-            string filename = $"dataset/{cam.name}_{sequenceNum:D4}_{frameNum:D8}.png";
+            string filename = $"dataset/{cam.name}_{episodeNum:D4}_{frameNum:D8}.png";
             System.IO.File.WriteAllBytes(filename, bytes);
         }
     }
