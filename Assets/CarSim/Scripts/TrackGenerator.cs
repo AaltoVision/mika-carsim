@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Random;
@@ -46,40 +47,26 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         verts.Clear();
         tris.Clear();
         uvs.Clear();
-        double[] x = rnd.NextDoubles(nRandomPoints);
-        double[] z = rnd.NextDoubles(nRandomPoints);
-        Point2D[] points = new Point2D[nRandomPoints];
+        int freq = 20;
+        float twopi = (float) Math.PI * 2;
+        float rad = 150;
+        Vector3[] vecs = new Vector3[freq];
 
-        for (int i = 0; i < nRandomPoints; i++) {
-            x[i] = x[i] * 300.0;
-            z[i] = z[i] * 300.0;
-            points[i] = new Point2D(x[i], z[i]);
-        }
+        for (int i = 0; i < freq; i++) {
+            float ang = ((float) i / (float) freq) * twopi;
+            float x = (float) Math.Cos(ang);
+            float y = (float) Math.Sin(ang);
+            Vector2 vec = new Vector2(x, y);
+            vec *= rad/2f + (float) rnd.NextDouble() * (rad/2f);
 
-        Polygon2D hull = Polygon2D.GetConvexHullFromPoints(points, true);
-        int n_vertices = hull.Count - 1;
-        IEnumerator<Point2D> hullVertices = hull.GetEnumerator();
-        hullVertices.MoveNext();
-        Vector3[] vecs = new Vector3[n_vertices];
-        for (int i = 0; i < n_vertices; i++) {
-            Point2D point = hullVertices.Current;
-            vecs[i] = new Vector3((float) point.X, 0f, (float) -point.Y);
-            if (i > 0) {
-                float dist = (vecs[i] - vecs[i-1]).magnitude;
-                if (dist < 25) {
-                    Debug.Log(dist);
-                    double[] randomDir = rnd.NextDoubles(3);
-                    vecs[i] = vecs[i] + (Vector3.Normalize(vecs[i] - vecs[i-1]) * 20f);
-                }
-            }
-            hullVertices.MoveNext();
+            vecs[i] = new Vector3(vec.x, 0f, vec.y);
         }
 
         // Move track to (0, 0, 0)
         Vector3 translate = Vector3.zero - vecs[0];
-        for (int i = 0; i < vecs.Length; i++) {
+        for (int i = 0; i < vecs.Length; i++)
             vecs[i] += translate;
-        }
+
         controlPointsList = vecs;
     }
 
@@ -112,12 +99,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         texture.Apply();
         GetComponent<Renderer>().material.mainTexture = texture;
     }
-    void OnRenderObject() {
-        if (frameNum % 100 == 0) {
-//            RandomizeTexture(((int) (rndsrc.NextDoubles(1)[0] * 10000)));
-        }
-        frameNum += 1;
-    }
+
     public void GenerateMesh() {
         //Draw the Catmull-Rom spline between the points
         for (int i = 0; i < controlPointsList.Length; i++)
@@ -141,6 +123,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         mesh.uv = uvs.ToArray();
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
+
     void Start()
     {
 //        RandomizeTexture(((int) (rndsrc.NextDoubles(1)[0] * 10000)));

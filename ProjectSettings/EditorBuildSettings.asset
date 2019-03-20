@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/autocar.unity
     guid: 28ef5c1e86a6f764dadf8de611edaeeb
   - enabled: 1
-    path: Assets/autocar2.unity
+    path: Assets/carsim.unity
     guid: b5653affd1c3b9849a2b6ac98b054157
   m_configObjects: {}

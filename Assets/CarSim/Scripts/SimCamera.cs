@@ -16,7 +16,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
     private int saveHeight = 480;
     private bool saveFrames = false;
 
-
     List<Camera> cameras = new List<Camera>();
     List<Shader> shaders = new List<Shader>();
 
@@ -52,13 +51,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
         GetComponent<Camera>().fieldOfView = 50f + fov * 70f;
         sequenceNum++;
         frameNum = 0;
-    }
-
-    void Update() {
-//        if (Input.GetKeyDown("space")) {
-//            renderMode = (RenderMode)(((int)renderMode + 1) % 3);
-//            SetRenderMode(renderMode);
-//        }
     }
 
     public static Color LayerToColor(int layer)

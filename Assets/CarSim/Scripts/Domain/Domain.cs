@@ -42,13 +42,4 @@ public class Domain : MonoBehaviour
             cam.OnSceneChange();
         }
     }
-
-    void Update() {
-//        if (captureFrames) {
-//            if (counter % 10 == 0) {
-//                ScreenCapture.CaptureScreenshot($"./frame_{counter:D6}.png", 1);
-//            }
-//            counter++;
-//        }
-    }
 }
