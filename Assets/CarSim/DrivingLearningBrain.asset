@@ -17,8 +17,8 @@ MonoBehaviour:
     numStackedVectorObservations: 1
     vectorActionSize: 02000000
     cameraResolutions:
-    - width: 160
-      height: 80
+    - width: 128
+      height: 64
       blackAndWhite: 0
     vectorActionDescriptions:
     - Throttle

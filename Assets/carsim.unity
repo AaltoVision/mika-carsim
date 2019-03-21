@@ -425,14 +425,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   broadcastHub:
     broadcastingBrains:
-    - {fileID: 11400000, guid: 888bfb1ab766a16e89e209722eb1c291, type: 2}
-    _brainsToControl: []
+    - {fileID: 11400000, guid: 377c61ecc938c937fa2d7286e285f4a6, type: 2}
+    _brainsToControl:
+    - {fileID: 11400000, guid: 377c61ecc938c937fa2d7286e285f4a6, type: 2}
   maxSteps: 0
   trainingConfiguration:
-    width: 80
-    height: 80
+    width: 128
+    height: 64
     qualityLevel: 1
-    timeScale: 100
+    timeScale: 10
     targetFrameRate: 60
   inferenceConfiguration:
     width: 1280
