@@ -8,7 +8,7 @@ using MathNet.Numerics.Random;
 public class Domain : MonoBehaviour
 {
     SystemRandomSource rnd = new SystemRandomSource(0, true);
-    int _seed = 0;
+    int _seed = 123;
     long counter = 0;
     public bool captureFrames = false;
     public bool randomize = true;
@@ -31,7 +31,7 @@ public class Domain : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
-        int s = int.TryParse(Utils.GetArg("--seed"), out s) ? s : 0;
+        int s = int.TryParse(Utils.GetArg("--seed"), out s) ? s : _seed;
         randomize = !Utils.ArgExists("--no-randomize");
         seed = s;
         RandomizeDomain();

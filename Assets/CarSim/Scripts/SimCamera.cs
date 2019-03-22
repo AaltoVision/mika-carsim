@@ -8,8 +8,17 @@ using MathNet.Numerics.Random;
 
 public class SimCamera : MonoBehaviour, IRandomizable
 {
+    public enum ShaderMode {
+        Default,
+        Segmentation,
+        Depth
+    }
+
+    public Shader defaultShader;
     public Shader segmentationShader;
     public Shader depthShader;
+    public Shader canonicalShader;
+    public ShaderMode shaderMode = ShaderMode.Default;
 
     private int saveEvery = 4;
     private int saveWidth = 640;
@@ -23,17 +32,22 @@ public class SimCamera : MonoBehaviour, IRandomizable
     public long frameNum { get; set; }
 
     void Start() {
-        shaders.Add(depthShader);
+        shaders.Add(defaultShader);
         shaders.Add(segmentationShader);
+        shaders.Add(depthShader);
         cameras.Add(GetComponent<Camera>());
-        cameras.Add(CreateCamera("depth"));
         cameras.Add(CreateCamera("segmentation"));
+        cameras.Add(CreateCamera("depth"));
+
+        if (Utils.ArgExists("--segmentation"))
+            shaderMode = ShaderMode.Segmentation;
+        else if (Utils.ArgExists("--depth"))
+            shaderMode = ShaderMode.Depth;
 
         UpdateCameras();
         OnSceneChange();
 
-        string arg = Utils.GetArg("--save-frames");
-        if (arg.ToLower() == "true") saveFrames = true;
+        saveFrames = Utils.ArgExists("--save-frames");
         saveWidth = int.TryParse(Utils.GetArg("--save-width"), out saveWidth) ? saveWidth : 640;
         saveHeight = int.TryParse(Utils.GetArg("--save-height"), out saveHeight) ? saveHeight : 480;
         saveEvery = int.TryParse(Utils.GetArg("--save-every"), out saveEvery) ? saveEvery : 4;
@@ -76,15 +90,20 @@ public class SimCamera : MonoBehaviour, IRandomizable
 
     public void UpdateCameras() {
         Camera mainCam = GetComponent<Camera>();
-        for (int i = 0; i < cameras.Count; i++) {
-            if (i == 0) continue;
-            Camera cam = cameras[i];
+        int i = (int) shaderMode;
+        for (int j = i; j < i+3; j++) {
+            int k = j % 3;
+            if (k == 0) {
+                cameras[k].targetDisplay = j - i;
+                continue;
+            }
+            Camera cam = cameras[k];
             cam.CopyFrom(mainCam);
             cam.RemoveAllCommandBuffers();
-            cam.SetReplacementShader(shaders[i-1], "RenderType");
+            cam.SetReplacementShader(shaders[k], "RenderType");
             cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.targetDisplay = i;
-            cam.enabled = false;
+            cam.targetDisplay = j - i;
+//            cam.enabled = false;
         }
     }
 
@@ -104,6 +123,7 @@ public class SimCamera : MonoBehaviour, IRandomizable
             var tag = r.gameObject.tag;
 
             mpb.SetColor("_SegColor", LayerToColor(layer));
+            mpb.SetColor("_CanColor", LayerToColor(layer));
             r.SetPropertyBlock(mpb);
         }
         UpdateCameras();
