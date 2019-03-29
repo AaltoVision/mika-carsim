@@ -20,6 +20,7 @@ public class GroundPlane : MonoBehaviour, IRandomizable
         );
     }
     public void RandomizeTexture(SystemRandomSource rnd) {
+        Destroy(GetComponent<Renderer>().material.mainTexture);
         int textureSize = 500;
         var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
         double[] noise = rnd.NextDoubles(textureSize * textureSize * 3);
@@ -43,6 +44,7 @@ public class GroundPlane : MonoBehaviour, IRandomizable
 
         // Apply all SetPixel calls
         texture.Apply();
+        texture.hideFlags = HideFlags.HideAndDontSave;
         GetComponent<Renderer>().material.color = rndColor;
         GetComponent<Renderer>().material.mainTexture = texture;
     }

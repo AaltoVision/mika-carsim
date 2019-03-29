@@ -7,6 +7,7 @@ public class CollideCheck : MonoBehaviour
     public TemplateAgent agent;
     public GameObject track;
     public long frameNum {get; set;}
+    private bool isOnTrack = true;
 
     void Awake()
     {
@@ -17,14 +18,22 @@ public class CollideCheck : MonoBehaviour
     private void OnTriggerExit(Collider collider)
     {
         if (collider.gameObject == track) {
-            if (frameNum > 30) {
-                frameNum = 0;
-                agent.OnCrash();
-            }
+            isOnTrack = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject == track) {
+            isOnTrack = true;
         }
     }
 
     void Update() {
         frameNum++;
+        if (frameNum > 60 && !isOnTrack) {
+            frameNum = 0;
+            agent.OnCrash();
+        }
     }
 }

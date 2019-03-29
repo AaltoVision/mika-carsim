@@ -71,6 +71,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
     }
 
     public void RandomizeTexture(SystemRandomSource rnd) {
+        Destroy(GetComponent<Renderer>().material.mainTexture);
         int textureSize = 500;
         int lineWidthPx = (int) (textureSize * (lineWidth / 2f));
         var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
@@ -97,6 +98,7 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
 
         // Apply all SetPixel calls
         texture.Apply();
+        texture.hideFlags = HideFlags.HideAndDontSave;
         GetComponent<Renderer>().material.mainTexture = texture;
     }
 
@@ -108,7 +110,8 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         }
 
         Mesh mesh = new Mesh();
-        GetComponent<MeshFilter>().sharedMesh.Clear();
+        Destroy(GetComponent<MeshCollider>().sharedMesh);
+        Destroy(GetComponent<MeshFilter>().sharedMesh);
         GetComponent<MeshFilter>().sharedMesh = mesh;
         mesh.vertices = verts.ToArray();
 

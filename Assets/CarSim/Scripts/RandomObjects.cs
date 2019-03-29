@@ -9,6 +9,7 @@ public class RandomObjects : MonoBehaviour, IRandomizable
 {
     public GameObject track;
     void DestroyObject(GameObject obj) {
+        Destroy(obj.GetComponent<Renderer>().material);
         #if UNITY_EDITOR
         Destroy(obj);
         #else
@@ -56,7 +57,7 @@ public class RandomObjects : MonoBehaviour, IRandomizable
                                                                            (float) color[2],
                                                                            1f);
             cube.layer = 10;
-            cube.hideFlags = HideFlags.DontSave;
+            cube.hideFlags = HideFlags.HideAndDontSave;
             Bounds cubeBounds = cube.GetComponent<Renderer>().bounds;
 
             for (int t = 0; t < trackVertices.Length; t += 1) {
