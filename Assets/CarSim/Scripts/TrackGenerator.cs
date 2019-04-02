@@ -5,6 +5,7 @@ using System.Linq;
 using MathNet.Numerics.Random;
 using MathNet.Spatial.Euclidean;
 using UnityEngine;
+using CarSim;
 using CarSim.Randomization;
 
 public class TrackGenerator : MonoBehaviour, IRandomizable
@@ -19,11 +20,20 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
     // Number of random points to sample for generating the track
     public int nRandomPoints = 10;
 
+    private bool randomizeTexture = false;
+
     List<Vector3> verts = new List<Vector3>();
     List<Vector2> uvs = new List<Vector2>();
     List<int> tris = new List<int>();
     //Display without having to press play
     long frameNum = 0;
+
+    void Start()
+    {
+        randomizeTexture = Utils.ArgExists("--randomize-texture");
+        GenerateMesh();
+    }
+
 
     void OnDrawGizmos()
     {
@@ -39,7 +49,9 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         trackWidth = 2f + (float) rnd.NextDouble() * 5f;
         lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
         GenerateControlPoints(rnd);
-        RandomizeTexture(rnd);
+        if (randomizeTexture) {
+            RandomizeTexture(rnd);
+        }
         GenerateMesh();
     }
 
@@ -125,12 +137,6 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         mesh.triangles = tris.ToArray();
         mesh.uv = uvs.ToArray();
         GetComponent<MeshCollider>().sharedMesh = mesh;
-    }
-
-    void Start()
-    {
-//        RandomizeTexture(((int) (rndsrc.NextDoubles(1)[0] * 10000)));
-        GenerateMesh();
     }
 
     //Display a spline between 2 points derived with the Catmull-Rom spline algorithm

@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using CarSim;
 using CarSim.Randomization;
 using MathNet.Numerics.Random;
 
 public class GroundPlane : MonoBehaviour, IRandomizable
 {
     Color materialColor;
-    public void Randomize(SystemRandomSource rnd) {
-        RandomizeTexture(rnd);
-        return;
-        double[] color = rnd.NextDoubles(3);
-        GetComponent<Renderer>().sharedMaterial.color = new Color(
-            (float) color[0],
-            (float) color[1],
-            (float) color[2],
-            1f
-        );
+    private bool randomizeTextures = false;
+
+    void Start() {
+        randomizeTextures = Utils.ArgExists("--randomize-textures");
     }
+
+    public void Randomize(SystemRandomSource rnd) {
+        if (randomizeTextures) RandomizeTexture(rnd);
+    }
+
     public void RandomizeTexture(SystemRandomSource rnd) {
         Destroy(GetComponent<Renderer>().material.mainTexture);
         int textureSize = 500;

@@ -8,7 +8,7 @@ using MathNet.Numerics.Random;
 public class Domain : MonoBehaviour
 {
     SystemRandomSource rnd = new SystemRandomSource(0, true);
-    int _seed = 123;
+    int _seed = 124;
     long counter = 0;
     public bool captureFrames = false;
     public bool randomize = true;

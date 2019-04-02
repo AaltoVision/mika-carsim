@@ -24,6 +24,7 @@ public class SimCamera : MonoBehaviour, IRandomizable
     private int saveWidth = 640;
     private int saveHeight = 480;
     private bool saveFrames = false;
+    private bool randomizeFov = false;
 
     List<Camera> cameras = new List<Camera>();
     List<Shader> shaders = new List<Shader>();
@@ -51,6 +52,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
         saveWidth = int.TryParse(Utils.GetArg("--save-width"), out saveWidth) ? saveWidth : 640;
         saveHeight = int.TryParse(Utils.GetArg("--save-height"), out saveHeight) ? saveHeight : 480;
         saveEvery = int.TryParse(Utils.GetArg("--save-every"), out saveEvery) ? saveEvery : 4;
+
+        randomizeFov = Utils.ArgExists("--randomize-fov");
     }
 
     public void Randomize(SystemRandomSource rnd) {
@@ -61,6 +64,12 @@ public class SimCamera : MonoBehaviour, IRandomizable
             (float) color[2],
             1f
         ));
+        if (randomizeFov) {
+            RandomizeFov(rnd);
+        }
+    }
+
+    private void RandomizeFov(SystemRandomSource rnd) {
         float fov = (float) rnd.NextDouble();
         GetComponent<Camera>().fieldOfView = 50f + fov * 70f;
     }
