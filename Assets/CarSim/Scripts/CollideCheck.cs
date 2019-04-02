@@ -31,7 +31,7 @@ public class CollideCheck : MonoBehaviour
 
     void Update() {
         frameNum++;
-        if (frameNum > 60 && !isOnTrack) {
+        if (frameNum > 10 && !isOnTrack) {
             frameNum = 0;
             agent.OnCrash();
         }
