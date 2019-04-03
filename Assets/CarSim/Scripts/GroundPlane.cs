@@ -12,7 +12,7 @@ public class GroundPlane : MonoBehaviour, IRandomizable
     private bool randomizeTextures = false;
 
     void Start() {
-        randomizeTextures = Utils.ArgExists("--randomize-textures");
+        randomizeTextures = Utils.ArgExists("--randomize-texture");
     }
 
     public void Randomize(SystemRandomSource rnd) {
