@@ -24,18 +24,21 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] private WheelEffects[] m_WheelEffects = new WheelEffects[4];
         [SerializeField] private Vector3 m_CentreOfMassOffset;
         [SerializeField] private float m_MaximumSteerAngle;
-        [Range(0, 1)] [SerializeField] private float m_SteerHelper; // 0 is raw physics , 1 the car will grip in the direction it is facing
-        [Range(0, 1)] [SerializeField] private float m_TractionControl; // 0 is no traction control, 1 is full interference
-        [SerializeField] private float m_FullTorqueOverAllWheels;
         [SerializeField] private float m_ReverseTorque;
         [SerializeField] private float m_MaxHandbrakeTorque;
-        [SerializeField] private float m_Downforce = 100f;
         [SerializeField] private SpeedType m_SpeedType;
-        [SerializeField] private float m_Topspeed = 200;
         [SerializeField] private static int NoOfGears = 5;
         [SerializeField] private float m_RevRangeBoundary = 1f;
-        [SerializeField] private float m_SlipLimit;
-        [SerializeField] private float m_BrakeTorque;
+
+        public float m_BrakeTorque;
+        public float m_SlipLimit;
+        public float m_Topspeed = 200;
+        public float m_Downforce = 100f;
+        [Range(0, 1)] public float m_TractionControl;
+        [Range(0, 1)] public float m_SteerHelper;
+        public float m_FullTorqueOverAllWheels;
+
+        protected Rigidbody m_Rigidbody;
 
         private Quaternion[] m_WheelMeshLocalRotations;
         private Vector3 m_Prevpos, m_Pos;
@@ -44,7 +47,6 @@ namespace UnityStandardAssets.Vehicles.Car
         private float m_GearFactor;
         private float m_OldRotation;
         private float m_CurrentTorque;
-        private Rigidbody m_Rigidbody;
         private const float k_ReversingThreshold = 0.01f;
 
         public bool Skidding { get; private set; }
@@ -56,7 +58,7 @@ namespace UnityStandardAssets.Vehicles.Car
         public float AccelInput { get; private set; }
 
         // Use this for initialization
-        private void Start()
+        protected virtual void Start()
         {
             m_WheelMeshLocalRotations = new Quaternion[4];
             for (int i = 0; i < 4; i++)
