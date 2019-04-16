@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEditor;
 using CarSim.Randomization;
 using CarSim;
 using MathNet.Numerics.Random;
@@ -57,13 +58,14 @@ public class SimCamera : MonoBehaviour, IRandomizable
     }
 
     public void Randomize(SystemRandomSource rnd) {
-        double[] color = rnd.NextDoubles(3);
-        GetComponent<Skybox>().material.SetColor("_SkyTint", new Color(
-            (float) color[0],
-            (float) color[1],
-            (float) color[2],
-            1f
-        ));
+        string[] guids = AssetDatabase.FindAssets("t:Cubemap", new[] {"Assets/CarSim/Cubemaps"});
+        if (guids.Length > 0) {
+            int rand = (int) (rnd.NextDouble() * guids.Length);
+            string path = AssetDatabase.GUIDToAssetPath(guids[rand]);
+            Debug.Log(path);
+            Cubemap cmap = AssetDatabase.LoadAssetAtPath<Cubemap>(path);
+            GetComponent<Skybox>().material.SetTexture("_Tex", cmap);
+        }
         if (randomizeFov) {
             RandomizeFov(rnd);
         }
