@@ -62,7 +62,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
         if (guids.Length > 0) {
             int rand = (int) (rnd.NextDouble() * guids.Length);
             string path = AssetDatabase.GUIDToAssetPath(guids[rand]);
-            Debug.Log(path);
             Cubemap cmap = AssetDatabase.LoadAssetAtPath<Cubemap>(path);
             GetComponent<Skybox>().material.SetTexture("_Tex", cmap);
         }
