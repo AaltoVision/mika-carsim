@@ -48,7 +48,6 @@ public class TemplateAgent : Agent {
         domain.Reset();
         crashed = false;
         car.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
-        car.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         Rigidbody body = car.GetComponent<Rigidbody>();
         body.velocity = Vector3.zero;
         body.angularVelocity = Vector3.zero;
