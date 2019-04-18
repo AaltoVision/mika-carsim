@@ -5,21 +5,53 @@ using UnityEngine;
 using CarSim;
 using CarSim.Randomization;
 using MathNet.Numerics.Random;
+using System.IO;
 
 public class GroundPlane : MonoBehaviour, IRandomizable
 {
     Color materialColor;
-    private bool randomizeTextures = false;
+    private bool randomizeTextures = true;
+    private bool useRandomFiles = false;
+    private List<Texture2D> textures = new List<Texture2D>();
 
-    void Start() {
-        randomizeTextures = Utils.ArgExists("--randomize-texture");
-    }
+    private readonly static string randomizeTextureArg = "--randomize-texture";
+    private readonly static string textureFileArg = "--texture-file";
 
     public void Randomize(SystemRandomSource rnd) {
-        if (randomizeTextures) RandomizeTexture(rnd);
+        if (randomizeTextures) {
+            if(useRandomFiles) LoadRandomTexture(rnd);
+            else RandomizeTexture(rnd);
+        }
     }
 
-    public void RandomizeTexture(SystemRandomSource rnd) {
+    void Awake() {
+        randomizeTextures = Utils.ArgExists(randomizeTextureArg);
+        useRandomFiles = Utils.ArgExists(textureFileArg);
+        if(useRandomFiles)
+            getTextures(Utils.GetArg(textureFileArg));
+    }
+
+    void getTextures(string textureFilePath) {
+        foreach (string filename in File.ReadAllLines(textureFilePath)) {
+            textures.Add(DiskLoadImage(filename));
+        }
+    }
+
+    Texture2D DiskLoadImage(string filePath) {
+         Texture2D tex = null;
+         if (File.Exists(filePath))     {
+             tex = new Texture2D(2, 2);
+             tex.LoadImage(File.ReadAllBytes(filePath));
+         }
+         return tex;
+     }
+
+    void LoadRandomTexture(SystemRandomSource rnd) {
+        GetComponent<Renderer>().material.color = Color.white;
+        GetComponent<Renderer>().material.mainTexture = textures[rnd.Next() % textures.Count];
+    }
+
+    void RandomizeTexture(SystemRandomSource rnd) {
         Destroy(GetComponent<Renderer>().material.mainTexture);
         int textureSize = 500;
         var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
