@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEditor;
 using CarSim.Randomization;
 using CarSim;
 using MathNet.Numerics.Random;
@@ -29,11 +28,13 @@ public class SimCamera : MonoBehaviour, IRandomizable
 
     List<Camera> cameras = new List<Camera>();
     List<Shader> shaders = new List<Shader>();
+    Object[] cubemaps = null;
 
     public long episodeNum { get; set; }
     public long frameNum { get; set; }
 
     void Start() {
+        cubemaps = Resources.LoadAll("Cubemaps");
         shaders.Add(defaultShader);
         shaders.Add(segmentationShader);
         shaders.Add(depthShader);
@@ -58,12 +59,9 @@ public class SimCamera : MonoBehaviour, IRandomizable
     }
 
     public void Randomize(SystemRandomSource rnd) {
-        string[] guids = AssetDatabase.FindAssets("t:Cubemap", new[] {"Assets/CarSim/Cubemaps"});
-        if (guids.Length > 0) {
-            int rand = (int) (rnd.NextDouble() * guids.Length);
-            string path = AssetDatabase.GUIDToAssetPath(guids[rand]);
-            Debug.Log(path);
-            Cubemap cmap = AssetDatabase.LoadAssetAtPath<Cubemap>(path);
+        if (cubemaps.Length > 0) {
+            int rand = (int) (rnd.NextDouble() * cubemaps.Length);
+            Cubemap cmap = (Cubemap)cubemaps[rand];
             GetComponent<Skybox>().material.SetTexture("_Tex", cmap);
         }
         if (randomizeFov) {
