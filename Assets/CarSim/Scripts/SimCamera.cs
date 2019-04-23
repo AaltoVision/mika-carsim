@@ -34,7 +34,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
     public long frameNum { get; set; }
 
     void Start() {
-        cubemaps = Resources.LoadAll("Cubemaps");
         shaders.Add(defaultShader);
         shaders.Add(segmentationShader);
         shaders.Add(depthShader);
@@ -59,6 +58,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
     }
 
     public void Randomize(SystemRandomSource rnd) {
+        if(cubemaps == null)
+            cubemaps = Resources.LoadAll("Cubemaps");
         if (cubemaps.Length > 0) {
             int rand = (int) (rnd.NextDouble() * cubemaps.Length);
             Cubemap cmap = (Cubemap)cubemaps[rand];
