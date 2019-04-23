@@ -29,8 +29,8 @@ public class TemplateAgent : Agent {
         Rigidbody body = car.GetComponent<Rigidbody>();
         forward = body.transform.forward;
 
-        float motor = vectorAction[0];
-        float steer = vectorAction[1];
+        float steer = vectorAction[0];
+        float motor = vectorAction[1];
         float footBrake = 0.0F;
         float handBrake = 0.0F;
         if (motor < 0.0F) {
