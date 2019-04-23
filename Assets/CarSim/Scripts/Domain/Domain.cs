@@ -19,6 +19,7 @@ public class Domain : MonoBehaviour
             rnd = new SystemRandomSource(value, true);
         }
     }
+    public GameObject car;
 
     private long episodeNum = 0;
 
@@ -45,6 +46,8 @@ public class Domain : MonoBehaviour
         foreach (var cam in GetComponentsInChildren<SimCamera>()) {
             cam.OnSceneChange();
         }
+
+        car.transform.rotation = Quaternion.Euler(0f, (float) rnd.NextDouble() * 360f, 0f);
     }
 
     public void Reset() {
