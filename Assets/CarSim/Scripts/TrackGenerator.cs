@@ -8,7 +8,7 @@ using UnityEngine;
 using CarSim;
 using CarSim.Randomization;
 
-public class TrackGenerator : MonoBehaviour, IRandomizable
+public class TrackGenerator : TextureRandomizable, IRandomizable
 {
     public Vector3[] controlPointsList;
     // Distance of track edges from center
@@ -30,7 +30,6 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
 
     void Start()
     {
-        randomizeTexture = Utils.ArgExists("--randomize-texture");
         GenerateMesh();
     }
 
@@ -45,12 +44,13 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         }
     }
 
-    public void Randomize(SystemRandomSource rnd) {
+    public override void Randomize(SystemRandomSource rnd) {
         trackWidth = 2f + (float) rnd.NextDouble() * 5f;
         lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
         GenerateControlPoints(rnd);
-        if (randomizeTexture) {
+        if (Utils.randomizeTextures()) {
             RandomizeTexture(rnd);
+            RandomizeTrackBorder(rnd);
         }
         GenerateMesh();
     }
@@ -82,35 +82,21 @@ public class TrackGenerator : MonoBehaviour, IRandomizable
         controlPointsList = vecs;
     }
 
-    public void RandomizeTexture(SystemRandomSource rnd) {
-        Destroy(GetComponent<Renderer>().material.mainTexture);
-        int textureSize = 500;
-        int lineWidthPx = (int) (textureSize * (lineWidth / 2f));
-        var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
-        double[] noise = rnd.NextDoubles(textureSize * textureSize * 3);
-        double[] colors = rnd.NextDoubles(2 * 3);
-        roadColor = new Color((float) colors[0], (float) colors[1], (float) colors[2], 1f);
-        lineColor = new Color((float) colors[4], (float) colors[4], (float) colors[5], 1f);
-
-        // set the pixel values
-        texture.SetPixels(Enumerable.Repeat<Color>(roadColor, textureSize*textureSize).ToArray());
-        for (int x = 0; x < lineWidthPx; x++) {
-            for (int y = 0; y < textureSize; y++) {
-                texture.SetPixel(x, y, lineColor);
-                texture.SetPixel(textureSize-x, y, lineColor);
+    public void RandomizeTrackBorder(SystemRandomSource rnd) {
+        Texture2D texture = (Texture2D)GetComponent<Renderer>().material.mainTexture;
+        int lineWidthPx = (int) (texture.width * (lineWidth / 2f));
+        double[] noise = rnd.NextDoubles(lineWidthPx * texture.height * 3);
+        double[] colors = rnd.NextDoubles(3);
+        lineColor = new Color((float) colors[0], (float) colors[1], (float) colors[2], 1f);
+         for (int x = 0; x < lineWidthPx; x++) {
+            for (int y = 0; y < texture.height; y++) {
+                int idx = y * lineWidthPx + x;
+                Color noiseColor = new Color((float)noise[idx*3], (float)noise[idx*3+1], (float)noise[idx*3+2], 1f);
+                texture.SetPixel(x, y, lineColor + noiseColor * new Color(0.5f, 0.5f, 0.5f, 1f));
+                texture.SetPixel(texture.width-x, y, lineColor + noiseColor * new Color(0.5f, 0.5f, 0.5f, 1f));
             }
         }
-        for (int x = 0; x < textureSize; x++) {
-            for (int y = 0; y < textureSize; y++) {
-                int idx = y * textureSize * 3 + x;
-                Color noiseColor = new Color((float)noise[idx], (float)noise[idx+1], (float)noise[idx+2], 1f);
-                texture.SetPixel(x, y, texture.GetPixel(x, y) + (noiseColor * new Color(0.5f, 0.5f, 0.5f, 1f)));
-            }
-        }
-
-        // Apply all SetPixel calls
         texture.Apply();
-        texture.hideFlags = HideFlags.HideAndDontSave;
         GetComponent<Renderer>().material.mainTexture = texture;
     }
 
