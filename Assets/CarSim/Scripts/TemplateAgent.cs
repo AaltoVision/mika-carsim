@@ -10,7 +10,6 @@ public class TemplateAgent : Agent {
     public Domain domain;
 
     private CarController m_Car;
-    private Vector3 forward;
     private bool crashed = false;
 
     // Use this for initialization
@@ -27,7 +26,6 @@ public class TemplateAgent : Agent {
             return;
         }
         Rigidbody body = car.GetComponent<Rigidbody>();
-        forward = body.transform.forward;
 
         float steer = vectorAction[0];
         float motor = vectorAction[1];
@@ -39,20 +37,21 @@ public class TemplateAgent : Agent {
         }
         m_Car.Move(steer, motor, footBrake, handBrake);
 
-        float reward = Vector3.Dot(forward, car.GetComponent<Rigidbody>().velocity) / rewardDivider;
+        float reward = Vector3.Dot(body.transform.forward, car.GetComponent<Rigidbody>().velocity) / rewardDivider;
         SetReward(reward);
     }
 
     public override void AgentReset()
     {
-        domain.Reset();
-        crashed = false;
-        car.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
         Rigidbody body = car.GetComponent<Rigidbody>();
         body.velocity = Vector3.zero;
         body.angularVelocity = Vector3.zero;
+
+        domain.Reset();
+        crashed = false;
+        car.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
+
         m_Car = car.GetComponent<CarController>();
-        forward = body.transform.forward;
     }
 
     public override void AgentOnDone()

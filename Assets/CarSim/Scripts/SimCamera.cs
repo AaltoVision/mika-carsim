@@ -99,6 +99,9 @@ public class SimCamera : MonoBehaviour, IRandomizable
     }
 
     public void UpdateCameras() {
+        if (cameras.Count == 0) {
+            return;
+        }
         Camera mainCam = GetComponent<Camera>();
         int i = (int) shaderMode;
         for (int j = i; j < i+3; j++) {
