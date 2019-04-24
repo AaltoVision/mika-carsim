@@ -3,5 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
-public class TemplateAcademy : Academy {}
+public class CarSimAcademy : Academy {}
 

@@ -5,6 +5,7 @@ using System.Linq;
 using MathNet.Numerics.Random;
 using MathNet.Spatial.Euclidean;
 using UnityEngine;
+using MLAgents;
 using CarSim;
 using CarSim.Randomization;
 
@@ -20,8 +21,6 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
     // Number of random points to sample for generating the track
     public int nRandomPoints = 10;
 
-    private bool randomizeTexture = false;
-
     List<Vector3> verts = new List<Vector3>();
     List<Vector2> uvs = new List<Vector2>();
     List<int> tris = new List<int>();
@@ -33,7 +32,6 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
         GenerateMesh();
     }
 
-
     void OnDrawGizmos()
     {
         //Draw the Catmull-Rom spline between the points
@@ -44,15 +42,15 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
         }
     }
 
-    public override void Randomize(SystemRandomSource rnd) {
-        trackWidth = 2f + (float) rnd.NextDouble() * 5f;
-        lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
-        GenerateControlPoints(rnd);
-        if (Utils.randomizeTextures()) {
+    public override void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
+        if (((float) rnd.NextDouble()) < resetParameters["random_track"]) {
+            trackWidth = 2f + (float) rnd.NextDouble() * 5f;
+            lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
+            GenerateControlPoints(rnd);
             RandomizeTexture(rnd);
             RandomizeTrackBorder(rnd);
+            GenerateMesh();
         }
-        GenerateMesh();
     }
 
     public void GenerateControlPoints(SystemRandomSource rnd) {

@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 using CarSim.Randomization;
 using CarSim;
 using MathNet.Numerics.Random;
+using MLAgents;
 
 public class SimCamera : MonoBehaviour, IRandomizable
 {
@@ -24,7 +25,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
     private int saveWidth = 640;
     private int saveHeight = 480;
     private bool saveFrames = false;
-    private bool randomizeFov = false;
 
     List<Camera> cameras = new List<Camera>();
     List<Shader> shaders = new List<Shader>();
@@ -53,19 +53,18 @@ public class SimCamera : MonoBehaviour, IRandomizable
         saveWidth = int.TryParse(Utils.GetArg("--save-width"), out saveWidth) ? saveWidth : 640;
         saveHeight = int.TryParse(Utils.GetArg("--save-height"), out saveHeight) ? saveHeight : 480;
         saveEvery = int.TryParse(Utils.GetArg("--save-every"), out saveEvery) ? saveEvery : 4;
-
-        randomizeFov = Utils.ArgExists("--randomize-fov");
     }
 
-    public void Randomize(SystemRandomSource rnd) {
+    public void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
         if(cubemaps == null)
             cubemaps = Resources.LoadAll("Cubemaps");
-        if (cubemaps.Length > 0) {
+        bool shouldRandomizeCubeMap = (float)rnd.NextDouble() < resetParameters["random_cubemap"];
+        if (cubemaps.Length > 0 && shouldRandomizeCubeMap) {
             int rand = (int) (rnd.NextDouble() * cubemaps.Length);
             Cubemap cmap = (Cubemap)cubemaps[rand];
             GetComponent<Skybox>().material.SetTexture("_Tex", cmap);
         }
-        if (randomizeFov) {
+        if (((float) rnd.NextDouble()) < resetParameters["random_fov"]) {
             RandomizeFov(rnd);
         }
     }

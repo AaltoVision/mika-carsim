@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MLAgents;
 using CarSim.Randomization;
 using CarSim;
 using MathNet.Numerics.Random;
@@ -10,8 +11,8 @@ public class Domain : MonoBehaviour
     SystemRandomSource rnd = new SystemRandomSource(0, true);
     int _seed = 124;
     long counter = 0;
+    public Academy academy;
     public bool captureFrames = false;
-    public bool randomize = true;
     public int seed {
         get { return _seed; }
         set {
@@ -33,26 +34,25 @@ public class Domain : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         int s = int.TryParse(Utils.GetArg("--seed"), out s) ? s : _seed;
-        randomize = !Utils.ArgExists("--no-randomize");
         seed = s;
         RandomizeDomain();
     }
 
     public void RandomizeDomain() {
+        ResetParameters resetParams = academy.resetParameters;
         IRandomizable[] components = GetComponentsInChildren<IRandomizable>();
         foreach (IRandomizable component in components) {
-            component.Randomize(rnd);
+            component.Randomize(rnd, resetParams);
         }
         foreach (var cam in GetComponentsInChildren<SimCamera>()) {
             cam.OnSceneChange();
         }
-
-        car.transform.rotation = Quaternion.Euler(0f, (float) rnd.NextDouble() * 360f, 0f);
+        float rotation = (rnd.NextDouble() < 0.5) ? 0f : 180f;
+        car.transform.rotation = Quaternion.Euler(0f, rotation, 0f);
     }
 
     public void Reset() {
-        if (randomize == true)
-            RandomizeDomain();
+        RandomizeDomain();
 
         episodeNum++;
         foreach (var cam in GetComponentsInChildren<SimCamera>()) {

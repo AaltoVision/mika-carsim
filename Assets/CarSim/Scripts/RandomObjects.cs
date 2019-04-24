@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using CarSim.Randomization;
+using MLAgents;
 using MathNet.Numerics.Random;
+using CarSim.Randomization;
 
 public class RandomObjects : MonoBehaviour, IRandomizable
 {
@@ -70,7 +71,7 @@ public class RandomObjects : MonoBehaviour, IRandomizable
         }
     }
 
-    public void Randomize(SystemRandomSource rnd) {
+    public void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
         DestroyChildren();
         GenerateChildren(rnd);
     }

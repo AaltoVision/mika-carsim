@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 using CarSim.Randomization;
 using MathNet.Numerics.Random;
+using MLAgents;
 
 namespace CarSim {
     public class RandomizedCarController : CarController, IRandomizable
@@ -16,7 +17,7 @@ namespace CarSim {
             Debug.Log("randomize start called");
         }
 
-        public void Randomize(SystemRandomSource rnd)
+        public void Randomize(SystemRandomSource rnd, ResetParameters resetParameters)
         {
             if (RandomizeDynamics) {
                 m_SlipLimit = (float) rnd.NextDouble();

@@ -3,7 +3,6 @@ using System;
 
 namespace CarSim {
     public static class Utils {
-        readonly static string randomizeTextureArg = "--randomize-texture";
         readonly static string textureFileArg = "--texture-file";
 
         public static string GetArg(string name)
@@ -32,12 +31,9 @@ namespace CarSim {
             return false;
         }
 
-        public static bool randomizeTextures() {
-            return ArgExists(randomizeTextureArg);
-        }
 
         public static bool useTextureFiles() {
-            return ArgExists(textureFileArg) && randomizeTextures();
+            return ArgExists(textureFileArg);
         }
 
         public static string randomFilePath() {
