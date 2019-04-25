@@ -26,6 +26,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
     private int saveHeight = 480;
     private bool saveFrames = false;
 
+    private float originalCameraHeight;
+
     List<Camera> cameras = new List<Camera>();
     List<Shader> shaders = new List<Shader>();
     Object[] cubemaps = null;
@@ -53,6 +55,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
         saveWidth = int.TryParse(Utils.GetArg("--save-width"), out saveWidth) ? saveWidth : 640;
         saveHeight = int.TryParse(Utils.GetArg("--save-height"), out saveHeight) ? saveHeight : 480;
         saveEvery = int.TryParse(Utils.GetArg("--save-every"), out saveEvery) ? saveEvery : 4;
+
+        originalCameraHeight = transform.position.y;
     }
 
     public void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
@@ -67,11 +71,24 @@ public class SimCamera : MonoBehaviour, IRandomizable
         if (((float) rnd.NextDouble()) < resetParameters["random_fov"]) {
             RandomizeFov(rnd);
         }
+        if ((float) rnd.NextDouble() < resetParameters["random_camera_height"]) {
+            RandomizeHeight(rnd);
+        }
     }
 
     private void RandomizeFov(SystemRandomSource rnd) {
         float fov = (float) rnd.NextDouble();
         GetComponent<Camera>().fieldOfView = 50f + fov * 70f;
+    }
+
+    private void RandomizeHeight(SystemRandomSource rnd) {
+        float newHeight = (float) (rnd.NextDouble() * 2.0 * originalCameraHeight + 0.3);
+        Vector3 position = transform.position;
+        transform.position = new Vector3(
+                position.x,
+                newHeight,
+                position.z
+            );
     }
 
     public static Color LayerToColor(int layer)
@@ -87,6 +104,7 @@ public class SimCamera : MonoBehaviour, IRandomizable
 
         return colors[layer % 8];
     }
+
     private Camera CreateCamera(string name)
     {
         GameObject obj = new GameObject(name, typeof(Camera));
