@@ -14,7 +14,6 @@ namespace CarSim {
         {
             base.Start();
             RandomizeDynamics = Utils.ArgExists("--randomize-dynamics");
-            Debug.Log("randomize start called");
         }
 
         public void Randomize(SystemRandomSource rnd, ResetParameters resetParameters)
