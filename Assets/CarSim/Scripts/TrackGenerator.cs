@@ -45,11 +45,15 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
     public override void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
         if (((float) rnd.NextDouble()) < resetParameters["random_track"]) {
             trackWidth = 2f + (float) rnd.NextDouble() * 5f;
-            lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
             GenerateControlPoints(rnd);
-            RandomizeTexture(rnd);
-            RandomizeTrackBorder(rnd);
             GenerateMesh();
+        }
+        if ((float) rnd.NextDouble() < resetParameters["random_texture"]) {
+            RandomizeTexture(rnd);
+        }
+        if ((float) rnd.NextDouble() < resetParameters["random_track"]) {
+            lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
+            RandomizeTrackBorder(rnd);
         }
     }
 
