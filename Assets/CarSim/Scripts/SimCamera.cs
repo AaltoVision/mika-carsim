@@ -152,9 +152,9 @@ public class SimCamera : MonoBehaviour, IRandomizable
             var layer = r.gameObject.layer;
             var tag = r.gameObject.tag;
 
-            mpb.SetColor("_SegColor", LayerToColor(layer));
-            mpb.SetColor("_CanColor", LayerToColor(layer));
-            r.SetPropertyBlock(mpb);
+            //mpb.SetColor("_SegColor", LayerToColor(layer));
+            //mpb.SetColor("_CanColor", LayerToColor(layer));
+            //r.SetPropertyBlock(mpb);
         }
         UpdateCameras();
     }

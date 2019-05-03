@@ -13,8 +13,8 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
 {
     public Vector3[] controlPointsList;
     // Distance of track edges from center
-    public float trackWidth = 5f;
-    public float lineWidth = 0.1f; // fraction of trackWidth
+    public float trackWidth = 6f;
+    public float lineWidth = 0.2f; // fraction of trackWidth
     public Color roadColor;
     public Color lineColor;
 
@@ -44,7 +44,7 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
 
     public override void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
         if (((float) rnd.NextDouble()) < resetParameters["random_track"]) {
-            trackWidth = 2f + (float) rnd.NextDouble() * 5f;
+            trackWidth = 5f + (float) rnd.NextDouble() * 2.0f;
             GenerateControlPoints(rnd);
             GenerateMesh();
         }
@@ -52,7 +52,7 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
             RandomizeTexture(rnd);
         }
         if ((float) rnd.NextDouble() < resetParameters["random_track"]) {
-            lineWidth = 0.1f + (float) rnd.NextDouble() * 0.4f;
+            lineWidth = 0.15f + (float) rnd.NextDouble() * 0.1f;
             RandomizeTrackBorder(rnd);
         }
     }
@@ -124,6 +124,7 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
         tris.Add(0); tris.Add(1); tris.Add(verts.Count-1);
         mesh.triangles = tris.ToArray();
         mesh.uv = uvs.ToArray();
+        mesh.RecalculateNormals();
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 

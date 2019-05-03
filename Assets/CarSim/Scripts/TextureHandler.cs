@@ -72,7 +72,7 @@ public class TextureHandler {
         // Apply all SetPixel calls
         texture.Apply();
         texture.hideFlags = HideFlags.HideAndDontSave;
-        return (rndColor, texture);
+        return (Color.white, texture);
     }
 
     public (Color, Texture2D) RandomColorTexture(SystemRandomSource rnd) {

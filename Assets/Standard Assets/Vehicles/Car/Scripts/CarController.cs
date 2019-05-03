@@ -64,6 +64,20 @@ namespace UnityStandardAssets.Vehicles.Car
             for (int i = 0; i < 4; i++)
             {
                 m_WheelMeshLocalRotations[i] = m_WheelMeshes[i].transform.localRotation;
+                WheelFrictionCurve forwardFriction = m_WheelColliders[i].forwardFriction;
+                WheelFrictionCurve sidewaysFriction = m_WheelColliders[i].sidewaysFriction;
+                forwardFriction.asymptoteSlip = 0.001f;
+                forwardFriction.asymptoteValue = 1.0f;
+                forwardFriction.extremumSlip = 0.001f;
+                forwardFriction.extremumValue = 1.0f;
+                forwardFriction.stiffness = 1.0f;
+                sidewaysFriction.asymptoteSlip = 0.001f;
+                sidewaysFriction.asymptoteValue = 1.0f;
+                sidewaysFriction.extremumSlip = 0.001f;
+                sidewaysFriction.extremumValue = 1.0f;
+                sidewaysFriction.stiffness = 1.0f;
+                m_WheelColliders[i].forwardFriction = forwardFriction;
+                m_WheelColliders[i].sidewaysFriction = sidewaysFriction;
             }
             m_WheelColliders[0].attachedRigidbody.centerOfMass = m_CentreOfMassOffset;
 
@@ -168,9 +182,21 @@ namespace UnityStandardAssets.Vehicles.Car
             CalculateRevs();
             GearChanging();
 
-            AddDownForce();
+            //AddDownForce();
             CheckForWheelSpin();
             TractionControl();
+            //SteerHack(steering, accel);
+        }
+
+        private void SteerHack(float steering, float accel) {
+            m_Rigidbody.velocity = transform.forward * accel * 9.5f;
+            float y_adjust = 0.2f * steering * m_Rigidbody.velocity.magnitude;
+            Debug.Log(y_adjust);
+            Quaternion rotation = Quaternion.AngleAxis(y_adjust, Vector3.up);
+            m_Rigidbody.velocity = rotation * m_Rigidbody.velocity;
+            Debug.Log(transform.eulerAngles.y);
+            transform.rotation *= rotation;
+            //transform.rotation = Quaternion.Euler(transform.eulerAngles.x, y_adjust + transform.eulerAngles.y, transform.eulerAngles.z);
         }
 
 
@@ -314,7 +340,7 @@ namespace UnityStandardAssets.Vehicles.Car
                     {
                         m_WheelColliders[i].GetGroundHit(out wheelHit);
 
-                        AdjustTorque(wheelHit.forwardSlip);
+                        //AdjustTorque(wheelHit.forwardSlip);
                     }
                     break;
 
