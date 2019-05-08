@@ -47,7 +47,7 @@ public class TextureHandler {
     	return textures[rnd.Next() % textures.Count];
     }
 
-    public (Color, Texture2D) RandomizeTexturePixels(SystemRandomSource rnd) {
+    public Texture2D RandomizeTexturePixels(SystemRandomSource rnd) {
         int textureSize = 500;
         var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
         double[] noise = rnd.NextDoubles(textureSize * textureSize * 3);
@@ -72,12 +72,12 @@ public class TextureHandler {
         // Apply all SetPixel calls
         texture.Apply();
         texture.hideFlags = HideFlags.HideAndDontSave;
-        return (rndColor, texture);
+        return texture;
     }
 
-    public (Color, Texture2D) RandomColorTexture(SystemRandomSource rnd) {
+    public Texture2D RandomColorTexture(SystemRandomSource rnd) {
     	if(Utils.useTextureFiles()) {
-    		return (Color.white, NextTexture(rnd));
+    		return NextTexture(rnd);
     	} else {
     		return RandomizeTexturePixels(rnd);
     	}

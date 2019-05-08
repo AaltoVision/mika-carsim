@@ -12,10 +12,9 @@ using MLAgents;
 public class TextureRandomizable : MonoBehaviour, IRandomizable {
     protected void RandomizeTexture(SystemRandomSource rnd) {
         Destroy(GetComponent<Renderer>().material.mainTexture);
-        (Color color, Texture2D texture) = TextureHandler.Instance().RandomColorTexture(rnd);
-        Texture2D newTexture = Instantiate(texture);
+        Texture2D newTexture = Instantiate(TextureHandler.Instance().RandomColorTexture(rnd));
         GetComponent<Renderer>().material.mainTexture = newTexture;
-        GetComponent<Renderer>().material.color = color;
+        GetComponent<Renderer>().material.color = Color.white;
     }
 
     public virtual void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
