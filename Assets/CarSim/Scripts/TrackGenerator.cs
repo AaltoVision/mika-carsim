@@ -124,6 +124,7 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
         tris.Add(0); tris.Add(1); tris.Add(verts.Count-1);
         mesh.triangles = tris.ToArray();
         mesh.uv = uvs.ToArray();
+        mesh.RecalculateNormals();
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 

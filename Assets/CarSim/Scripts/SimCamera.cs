@@ -12,7 +12,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
     public enum ShaderMode {
         Default,
         Segmentation,
-        Depth
+        Depth,
+        Canonical
     }
 
     public Shader defaultShader;
@@ -20,6 +21,11 @@ public class SimCamera : MonoBehaviour, IRandomizable
     public Shader depthShader;
     public Shader canonicalShader;
     public ShaderMode shaderMode = ShaderMode.Default;
+
+    public Texture2D canTextureTrack;
+    public Texture2D canTextureGround;
+
+    public Agent agent;
 
     private int saveEvery = 4;
     private int saveWidth = 640;
@@ -39,14 +45,18 @@ public class SimCamera : MonoBehaviour, IRandomizable
         shaders.Add(defaultShader);
         shaders.Add(segmentationShader);
         shaders.Add(depthShader);
+        shaders.Add(canonicalShader);
         cameras.Add(GetComponent<Camera>());
         cameras.Add(CreateCamera("segmentation"));
         cameras.Add(CreateCamera("depth"));
+        cameras.Add(CreateCamera("canonical"));
 
         if (Utils.ArgExists("--segmentation"))
             shaderMode = ShaderMode.Segmentation;
         else if (Utils.ArgExists("--depth"))
             shaderMode = ShaderMode.Depth;
+        else if (Utils.ArgExists("--canonical"))
+            shaderMode = ShaderMode.Canonical;
 
         UpdateCameras();
         OnSceneChange();
@@ -120,9 +130,10 @@ public class SimCamera : MonoBehaviour, IRandomizable
             return;
         }
         Camera mainCam = GetComponent<Camera>();
+        int n_cameras = cameras.Count;
         int i = (int) shaderMode;
-        for (int j = i; j < i+3; j++) {
-            int k = j % 3;
+        for (int j = i; j < i+n_cameras; j++) {
+            int k = j % n_cameras;
             if (k == 0) {
                 cameras[k].targetDisplay = j - i;
                 continue;
@@ -154,6 +165,16 @@ public class SimCamera : MonoBehaviour, IRandomizable
 
             mpb.SetColor("_SegColor", LayerToColor(layer));
             mpb.SetColor("_CanColor", LayerToColor(layer));
+            Texture canTex = r.sharedMaterial.mainTexture;
+            if (canTex != null) {
+                Debug.Log("Moi");
+                if (layer == 8)
+                    canTex = canTextureTrack;
+                else if (layer == 9)
+                    canTex = canTextureGround;
+
+                mpb.SetTexture("_CanTex", canTex);
+            }
             r.SetPropertyBlock(mpb);
         }
         UpdateCameras();
