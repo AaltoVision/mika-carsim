@@ -164,7 +164,7 @@ public class SimCamera : MonoBehaviour, IRandomizable
             var tag = r.gameObject.tag;
 
             mpb.SetColor("_SegColor", LayerToColor(layer));
-            mpb.SetColor("_CanColor", LayerToColor(layer));
+            mpb.SetColor("_CanColor", Color.white);
             Texture canTex = r.sharedMaterial.mainTexture;
             if (canTex != null) {
                 Debug.Log("Moi");
