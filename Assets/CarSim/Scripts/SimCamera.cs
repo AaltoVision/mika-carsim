@@ -6,6 +6,7 @@ using CarSim.Randomization;
 using CarSim;
 using MathNet.Numerics.Random;
 using MLAgents;
+using System;
 
 public class SimCamera : MonoBehaviour, IRandomizable
 {
@@ -32,14 +33,14 @@ public class SimCamera : MonoBehaviour, IRandomizable
     private int saveHeight = 480;
     private bool saveFrames = false;
 
-    private float originalCameraHeight;
-
     List<Camera> cameras = new List<Camera>();
     List<Shader> shaders = new List<Shader>();
-    Object[] cubemaps = null;
+    UnityEngine.Object[] cubemaps = null;
 
     public long episodeNum { get; set; }
     public long frameNum { get; set; }
+
+    private string timestamp = null;
 
     void Start() {
         shaders.Add(defaultShader);
@@ -50,6 +51,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
         cameras.Add(CreateCamera("segmentation"));
         cameras.Add(CreateCamera("depth"));
         cameras.Add(CreateCamera("canonical"));
+
+        timestamp = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
         if (Utils.ArgExists("--segmentation"))
             shaderMode = ShaderMode.Segmentation;
@@ -65,8 +68,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
         saveWidth = int.TryParse(Utils.GetArg("--save-width"), out saveWidth) ? saveWidth : 640;
         saveHeight = int.TryParse(Utils.GetArg("--save-height"), out saveHeight) ? saveHeight : 480;
         saveEvery = int.TryParse(Utils.GetArg("--save-every"), out saveEvery) ? saveEvery : 4;
-
-        originalCameraHeight = transform.position.y;
     }
 
     public void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
@@ -84,6 +85,18 @@ public class SimCamera : MonoBehaviour, IRandomizable
         if ((float) rnd.NextDouble() < resetParameters["random_camera_height"]) {
             RandomizeHeight(rnd);
         }
+        RandomizeRotation(rnd);
+    }
+
+    private void RandomizeRotation(SystemRandomSource rnd) {
+        float x = (float) rnd.NextDouble() * 20.0f - 10.0f;
+        float y = transform.rotation.eulerAngles.y;
+        float z = (float) rnd.NextDouble() * 20.0f - 10.0f;
+        transform.rotation = Quaternion.Euler(
+                x,
+                y,
+                z
+            );
     }
 
     private void RandomizeFov(SystemRandomSource rnd) {
@@ -92,7 +105,7 @@ public class SimCamera : MonoBehaviour, IRandomizable
     }
 
     private void RandomizeHeight(SystemRandomSource rnd) {
-        float newHeight = (float) (rnd.NextDouble() * 2.0 * originalCameraHeight + 0.3);
+        float newHeight = (float) (rnd.NextDouble() + 0.5);
         Vector3 position = transform.position;
         transform.position = new Vector3(
                 position.x,
@@ -103,6 +116,8 @@ public class SimCamera : MonoBehaviour, IRandomizable
 
     public static Color LayerToColor(int layer)
     {
+        if(layer == 8)
+            return new Color(0.0f, 1.0f, 0.0f);
         float mul = (int) (layer / 8) * 0.2f;
         List<Color> colors = new List<Color>();
         for (int i = 0; i < 8; i++) {
@@ -155,7 +170,7 @@ public class SimCamera : MonoBehaviour, IRandomizable
     }
 
     public void OnSceneChange() {
-        var renderers = Object.FindObjectsOfType<Renderer>();
+        var renderers = UnityEngine.Object.FindObjectsOfType<Renderer>();
         var mpb = new MaterialPropertyBlock();
         foreach (var r in renderers)
         {
@@ -167,7 +182,6 @@ public class SimCamera : MonoBehaviour, IRandomizable
             mpb.SetColor("_CanColor", Color.white);
             Texture canTex = r.sharedMaterial.mainTexture;
             if (canTex != null) {
-                Debug.Log("Moi");
                 if (layer == 8)
                     canTex = canTextureTrack;
                 else if (layer == 9)
@@ -194,8 +208,9 @@ public class SimCamera : MonoBehaviour, IRandomizable
             RenderTexture.active = null;
             Destroy(rt);
             byte[] bytes = screenShot.EncodeToPNG();
-            string filename = $"dataset/{cam.name}_{episodeNum:D4}_{frameNum:D8}.png";
+            string filename = $"dataset/{cam.name}_{episodeNum:D4}_{frameNum:D8}_{timestamp}.png";
             System.IO.File.WriteAllBytes(filename, bytes);
+            Destroy(screenShot);
         }
     }
 }
