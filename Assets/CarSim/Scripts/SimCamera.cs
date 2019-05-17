@@ -89,9 +89,9 @@ public class SimCamera : MonoBehaviour, IRandomizable
     }
 
     private void RandomizeRotation(SystemRandomSource rnd) {
-        float x = (float) rnd.NextDouble() * 20.0f - 10.0f;
+        float x = (float) rnd.NextDouble() * 5.0f - 2.5f;
         float y = transform.rotation.eulerAngles.y;
-        float z = (float) rnd.NextDouble() * 20.0f - 10.0f;
+        float z = (float) rnd.NextDouble() * 5.0f - 2.5f;
         transform.rotation = Quaternion.Euler(
                 x,
                 y,
