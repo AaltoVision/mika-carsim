@@ -144,6 +144,8 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
         //Make sure it's is adding up to 1, so 0.3 will give a gap, but 0.2 will work
         float resolution = 0.01f;
 
+        float uv_y = 0f;
+
         //How many times should we loop?
         int loops = Mathf.FloorToInt(1f / resolution);
 
@@ -171,12 +173,15 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
                 Vector3 uv_one = lastPos - uvp;
                 float segmentLength = uvdir.magnitude;
                 float segmentWidth = trackWidth * 2f;
-                Vector2 uv_1 = new Vector2(0f, (float)(i%2) * (segmentLength / segmentWidth));
-                Vector2 uv_2 = new Vector2(1f, (float)(i%2) * (segmentLength / segmentWidth));
+                float new_uv_y = uv_y + (segmentLength / segmentWidth);
+                Vector2 uv_1 = new Vector2(0f, new_uv_y);
+                Vector2 uv_2 = new Vector2(1f, new_uv_y);
                 uvs.Add(uv_1);
                 uvs.Add(uv_2);
                 verts.Add(newPos-perp);
                 verts.Add(newPos+perp);
+
+                uv_y = new_uv_y;
             }
 
             //Save this pos so we can draw the next line segment
