@@ -43,10 +43,10 @@ public class SimCamera : MonoBehaviour, IRandomizable
     private string timestamp = null;
 
     void Start() {
+        shaders.Add(defaultShader);
+        shaders.Add(segmentationShader);
+        shaders.Add(depthShader);
         shaders.Add(canonicalShader);
-        //shaders.Add(segmentationShader);
-        //shaders.Add(depthShader);
-        //shaders.Add(canonicalShader);
         cameras.Add(GetComponent<Camera>());
         cameras.Add(CreateCamera("segmentation"));
         cameras.Add(CreateCamera("depth"));
@@ -151,12 +151,12 @@ public class SimCamera : MonoBehaviour, IRandomizable
             int k = j % n_cameras;
             if (k == 0) {
                 cameras[k].targetDisplay = j - i;
-                //continue;
+                continue;
             }
             Camera cam = cameras[k];
             cam.CopyFrom(mainCam);
             cam.RemoveAllCommandBuffers();
-            cam.SetReplacementShader(shaders[0], "RenderType");
+            cam.SetReplacementShader(shaders[k], "RenderType");
             cam.clearFlags = CameraClearFlags.SolidColor;
             cam.targetDisplay = j - i;
 //            cam.enabled = false;

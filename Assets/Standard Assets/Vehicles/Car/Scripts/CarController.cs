@@ -182,23 +182,10 @@ namespace UnityStandardAssets.Vehicles.Car
             CalculateRevs();
             GearChanging();
 
-            //AddDownForce();
+            AddDownForce();
             CheckForWheelSpin();
             TractionControl();
-            //SteerHack(steering, accel);
         }
-
-        private void SteerHack(float steering, float accel) {
-            m_Rigidbody.velocity = transform.forward * accel * 9.5f;
-            float y_adjust = 0.2f * steering * m_Rigidbody.velocity.magnitude;
-            Debug.Log(y_adjust);
-            Quaternion rotation = Quaternion.AngleAxis(y_adjust, Vector3.up);
-            m_Rigidbody.velocity = rotation * m_Rigidbody.velocity;
-            Debug.Log(transform.eulerAngles.y);
-            transform.rotation *= rotation;
-            //transform.rotation = Quaternion.Euler(transform.eulerAngles.x, y_adjust + transform.eulerAngles.y, transform.eulerAngles.z);
-        }
-
 
         private void CapSpeed()
         {
@@ -340,7 +327,7 @@ namespace UnityStandardAssets.Vehicles.Car
                     {
                         m_WheelColliders[i].GetGroundHit(out wheelHit);
 
-                        //AdjustTorque(wheelHit.forwardSlip);
+                        AdjustTorque(wheelHit.forwardSlip);
                     }
                     break;
 
