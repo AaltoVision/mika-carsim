@@ -54,12 +54,16 @@ public class SimCamera : MonoBehaviour, IRandomizable
 
         timestamp = DateTime.Now.ToString("yyyyMMddHHmmssfff");
 
-        if (Utils.ArgExists("--segmentation"))
+        if (Utils.ArgExists("--segmentation")) {
             shaderMode = ShaderMode.Segmentation;
-        else if (Utils.ArgExists("--depth"))
+            agent.agentParameters.agentCameras[0] = cameras[1];
+        } else if (Utils.ArgExists("--depth")) {
             shaderMode = ShaderMode.Depth;
-        else if (Utils.ArgExists("--canonical"))
+            agent.agentParameters.agentCameras[0] = cameras[2];
+        } else if (Utils.ArgExists("--canonical")) {
             shaderMode = ShaderMode.Canonical;
+            agent.agentParameters.agentCameras[0] = cameras[3];
+        }
 
         UpdateCameras();
         OnSceneChange();
