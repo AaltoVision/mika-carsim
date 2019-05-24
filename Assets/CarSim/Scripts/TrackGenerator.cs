@@ -13,7 +13,7 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
 {
     public Vector3[] controlPointsList;
     // Distance of track edges from center
-    public float trackWidth = 8f;
+    public float trackWidth = 7f;
     public float lineWidth = 0.2f; // fraction of trackWidth
     public Color roadColor;
     public Color lineColor;
@@ -44,7 +44,7 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
 
     public override void Randomize(SystemRandomSource rnd, ResetParameters resetParameters) {
         if (((float) rnd.NextDouble()) < resetParameters["random_track"]) {
-            trackWidth = 7f + (float) rnd.NextDouble() * 2.0f;
+            trackWidth = 6f + (float) rnd.NextDouble() * 2.0f;
             GenerateControlPoints(rnd);
             GenerateMesh();
         }
@@ -52,7 +52,7 @@ public class TrackGenerator : TextureRandomizable, IRandomizable
             RandomizeTexture(rnd);
         }
         if ((float) rnd.NextDouble() < resetParameters["random_track"]) {
-            lineWidth = 0.1f + (float) rnd.NextDouble() * 0.1f;
+            lineWidth = 0.05f;
             RandomizeTrackBorder(rnd);
         }
     }

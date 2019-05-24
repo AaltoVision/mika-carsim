@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 
 width = 500
-lineWidth = 40
+lineWidth = 25
 
 line_color = np.ones((width, lineWidth, 3))
 track_color = np.array([0.0, 1.0, 0.0])
