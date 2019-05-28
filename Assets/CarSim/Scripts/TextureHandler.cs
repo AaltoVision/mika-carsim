@@ -10,6 +10,8 @@ using UnityEngine;
 public class TextureHandler {
      
     private List<Texture2D> textures = new List<Texture2D>();
+    private int textureSize = 500;
+    private Texture2D texture = null;
     public static TextureHandler _instance = null;
 
     /* singleton */
@@ -24,6 +26,8 @@ public class TextureHandler {
     }
     
     public TextureHandler() {
+        texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
+        texture.hideFlags = HideFlags.HideAndDontSave;
         if(Utils.useTextureFiles())  
             getTextures(Utils.randomFilePath());
     }
@@ -35,11 +39,11 @@ public class TextureHandler {
     }
 
     Texture2D DiskLoadImage(string filePath) {
-         Texture2D tex = null;
-         if (File.Exists(filePath))     {
-             tex = new Texture2D(2, 2, TextureFormat.ARGB32, false);
-             tex.LoadImage(File.ReadAllBytes(filePath));
-         }
+        Texture2D tex = null;
+        if (File.Exists(filePath))     {
+            tex = new Texture2D(2, 2, TextureFormat.ARGB32, false);
+            tex.LoadImage(File.ReadAllBytes(filePath));
+        }
          return tex;
     }
 
@@ -48,8 +52,6 @@ public class TextureHandler {
     }
 
     public Texture2D RandomizeTexturePixels(SystemRandomSource rnd) {
-        int textureSize = 500;
-        var texture = new Texture2D(textureSize, textureSize, TextureFormat.ARGB32, false);
         double[] noise = rnd.NextDoubles(textureSize * textureSize * 3);
         double[] colors = rnd.NextDoubles(3);
         Color rndColor = new Color((float) colors[0],
@@ -71,7 +73,6 @@ public class TextureHandler {
 
         // Apply all SetPixel calls
         texture.Apply();
-        texture.hideFlags = HideFlags.HideAndDontSave;
         return texture;
     }
 
