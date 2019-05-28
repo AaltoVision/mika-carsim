@@ -8,27 +8,40 @@ using MLAgents;
 namespace CarSim {
     public class RandomizedCarController : CarController, IRandomizable
     {
+        private float defaultTopSpeed;
+        private float defaultMass;
+        private float defaultSlipLimit;
+        private float defaultBrakeTorque;
+        private float defaultMaxSteerAngle;
 
-        private bool RandomizeDynamics;
+        private bool initialized;
         protected override void Start()
         {
             base.Start();
-            RandomizeDynamics = Utils.ArgExists("--randomize-dynamics");
+            initialized = true;
+
+            defaultTopSpeed = m_Topspeed;
+            defaultMass = m_Rigidbody.mass;
+            defaultSlipLimit = m_SlipLimit;
+            defaultBrakeTorque = m_BrakeTorque;
+            defaultMaxSteerAngle = m_MaximumSteerAngle;
         }
 
         public void Randomize(SystemRandomSource rnd, ResetParameters resetParameters)
         {
-            if (RandomizeDynamics) {
-                m_SlipLimit = (float) rnd.NextDouble();
-                m_Topspeed = 50.0f + (float) (rnd.NextDouble() * 200.0);
-                m_Downforce = (float)(rnd.NextDouble() * 50.0);
-                m_BrakeTorque = (float)(rnd.NextDouble() * 10000);
-                m_TractionControl = (float) rnd.NextDouble();
-                m_SteerHelper = (float) rnd.NextDouble();
-                m_FullTorqueOverAllWheels = (float)(2000.0 + rnd.NextDouble() * 2500);
-
-                m_Rigidbody.mass = 200.0f + (float)(rnd.NextDouble() * 2000.0);
+            if (initialized && rnd.NextDouble() < resetParameters["random_dynamics"]) {
+                m_Topspeed = defaultTopSpeed + defaultTopSpeed * random(rnd);
+                if (m_Rigidbody) {
+                    m_Rigidbody.mass = defaultMass + defaultMass * random(rnd);
+                }
+                m_SlipLimit = defaultSlipLimit + defaultSlipLimit * random(rnd);
+                m_BrakeTorque = defaultBrakeTorque + defaultBrakeTorque * random(rnd);
+                m_MaximumSteerAngle = defaultMaxSteerAngle + defaultMaxSteerAngle * random(rnd);
             }
+        }
+
+        private float random(SystemRandomSource rnd) {
+            return (float)rnd.NextDouble() - 0.5f;
         }
     }
 }

@@ -23,13 +23,13 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] private GameObject[] m_WheelMeshes = new GameObject[4];
         [SerializeField] private WheelEffects[] m_WheelEffects = new WheelEffects[4];
         [SerializeField] private Vector3 m_CentreOfMassOffset;
-        [SerializeField] private float m_MaximumSteerAngle;
         [SerializeField] private float m_ReverseTorque;
         [SerializeField] private float m_MaxHandbrakeTorque;
         [SerializeField] private SpeedType m_SpeedType;
         [SerializeField] private static int NoOfGears = 5;
         [SerializeField] private float m_RevRangeBoundary = 1f;
 
+        public float m_MaximumSteerAngle;
         public float m_BrakeTorque;
         public float m_SlipLimit;
         public float m_Topspeed = 200;
