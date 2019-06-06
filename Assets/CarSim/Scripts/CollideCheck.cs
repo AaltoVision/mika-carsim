@@ -19,21 +19,18 @@ public class CollideCheck : MonoBehaviour
     {
         if (collider.gameObject == track) {
             isOnTrack = false;
+            agent.SetOnTrack(false);
         }
     }
 
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject == track) {
+            agent.SetOnTrack(true);
             isOnTrack = true;
         }
     }
 
     void Update() {
-        frameNum++;
-        if (frameNum > 10 && !isOnTrack) {
-            frameNum = 0;
-            agent.OnCrash();
-        }
     }
 }

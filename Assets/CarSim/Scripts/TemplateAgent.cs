@@ -10,7 +10,7 @@ public class TemplateAgent : Agent {
     public Domain domain;
 
     private CarController m_Car;
-    private bool crashed = false;
+    private bool isOnTrack = true;
 
     // Use this for initialization
     public override void InitializeAgent()
@@ -20,11 +20,12 @@ public class TemplateAgent : Agent {
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        if (crashed) {
-            SetReward(-10.0f);
-            Done();
-            return;
-        }
+//        if (crashed) {
+//            SetReward(-10.0f);
+//            Done();
+//            return;
+//        }
+
         Rigidbody body = car.GetComponent<Rigidbody>();
 
         float steer = vectorAction[0];
@@ -37,7 +38,10 @@ public class TemplateAgent : Agent {
         }
         m_Car.Move(steer, motor, footBrake, handBrake);
 
-        float reward = Vector3.Dot(body.transform.forward, car.GetComponent<Rigidbody>().velocity) / rewardDivider;
+        float reward = -0.1f;
+        if (isOnTrack)
+            reward += Vector3.Dot(body.transform.forward, car.GetComponent<Rigidbody>().velocity) / rewardDivider;
+        Debug.Log(reward);
         SetReward(reward);
     }
 
@@ -48,7 +52,6 @@ public class TemplateAgent : Agent {
         body.angularVelocity = Vector3.zero;
 
         domain.Reset();
-        crashed = false;
         car.transform.position = new Vector3(0.0f, 0.1f, 0.0f);
 
         m_Car = car.GetComponent<CarController>();
@@ -59,8 +62,8 @@ public class TemplateAgent : Agent {
         AgentReset();
     }
 
-    public void OnCrash()
+    public void SetOnTrack(bool onTrack)
     {
-        crashed = true;
+        isOnTrack = onTrack;
     }
 }
