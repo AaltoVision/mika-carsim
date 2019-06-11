@@ -30,6 +30,14 @@ for _ in range(10):
         print(reward)
 ```
 
+If you want to pass command line arguments to the simulator when using Python, you can make a wrapper bash script that is passed to the `UnityEnv`, which contains the arguments needed:
+
+```
+#!/bin/bash
+./carsim.x86_64 --segmentation $@
+```
+Save the wrapper as e.g. 'wrapper.x86_64' (`UnityEnv` requires the file extension)
+
 ## Configuration
 There are various configuration options that can be altered in the Editor. The `Academy` component contains the following options:
  * `Width` : Observation width in pixels
@@ -59,3 +67,14 @@ List of available parameters:
  * `random_cubemap`: Randomize skybox cubemap
  * `random_camera_height`: Randomize camera height from ground
  * `random_dynamics`: Randomize various car dynamics (torque, steering angle, top speed, etc.)
+
+## Shaders
+The simulator contains a couple useful shaders: a semantic segmentation shader, and a depth shader. These can be enabled with `--segmentation` and `--depth` command line arguments respectively.
+
+## Recording data
+Collecting observation frames from the simulator can be enabled with `--save-frames` command line argument. In addition, these arguments can be used to configure the data collection:
+ * `--save-every n`: save every n:th frame
+ * `--save-width x`: image width for the saved frames
+ * `--save-height x`: image height for the saved frames
+
+ The data is saved in the current working directory, to a new directory called `dataset`.
