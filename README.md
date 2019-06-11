@@ -3,7 +3,7 @@
 This repository contains a Unity-based driving simulator for training reinforcement learning agents.
 
 ## Features
- * Domain randomization (textures, cubemaps, driving dynamics, track properties)
+ * Domain randomization (textures, cubemaps, driving dynamics, track properties, random objects around the track)
  * OpenAI Gym compatible
 
 ## Getting started
